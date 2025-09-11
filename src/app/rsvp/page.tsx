@@ -1,30 +1,42 @@
 'use client'
 
-import { useState } from 'react'
+import { FormStep, InvitationWithGuests, Guest, Response } from '@/types'
+import { useState, FormEvent } from 'react'
+
+interface InvitationNotes {
+  dietaryRestrictions: string
+  notes: string
+}
+
+type GuestResponsesState = Record<string, {
+  fridayResponse?: Response
+  saturdayResponse?: Response
+  sundayResponse?: Response
+}>
 
 export default function RSVPPage() {
-  const [step, setStep] = useState('lookup') // 'lookup' or 'form'
-  const [invitation, setInvitation] = useState(null)
-  const [searchedGuest, setSearchedGuest] = useState(null)
-  const [guestResponses, setGuestResponses] = useState({})
-  const [invitationNotes, setInvitationNotes] = useState({
+  const [step, setStep] = useState<FormStep>('lookup')
+  const [invitation, setInvitation] = useState<InvitationWithGuests | null>(null)
+  const [searchedGuest, setSearchedGuest] = useState<Guest | null>(null)
+  const [guestResponses, setGuestResponses] = useState<GuestResponsesState>({})
+  const [invitationNotes, setInvitationNotes] = useState<InvitationNotes>({
     dietaryRestrictions: '',
     notes: ''
   })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>('')
 
-  const handleLookup = async (e) => {
+  const handleLookup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setError('')
     
-    const formData = new FormData(e.target)
-    const firstName = formData.get('firstName')
-    const lastName = formData.get('lastName')
+    const formData = new FormData(e.currentTarget)
+    const firstName = formData.get('firstName') as string
+    const lastName = formData.get('lastName') as string
     
     try {
-      const response = await fetch(`/api/rsvp?firstName=${firstName}&lastName=${lastName}`)
+      const response = await fetch(`/api/rsvp?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}`)
       const data = await response.json()
       
       if (response.ok) {
@@ -33,12 +45,12 @@ export default function RSVPPage() {
         setStep('form')
         
         // Initialize form data with existing responses
-        const responses = {}
-        data.invitation.guests.forEach(guest => {
+        const responses: GuestResponsesState = {}
+        data.invitation.guests.forEach((guest: Guest) => {
           responses[guest.id] = {
-            fridayResponse: guest.fridayResponse || '',
-            saturdayResponse: guest.saturdayResponse || '',
-            sundayResponse: guest.sundayResponse || ''
+            fridayResponse: guest.fridayResponse || undefined,
+            saturdayResponse: guest.saturdayResponse || undefined,
+            sundayResponse: guest.sundayResponse || undefined
           }
         })
         setGuestResponses(responses)
@@ -52,19 +64,26 @@ export default function RSVPPage() {
         setError(data.error || 'Guest not found')
       }
     } catch (error) {
+      console.error('Lookup error:', error)
       setError('Failed to find guest. Please try again.')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleRSVPSubmit = async (e) => {
+  const handleRSVPSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setError('')
     
+    if (!invitation) {
+      setError('No invitation found')
+      setLoading(false)
+      return
+    }
+    
     // Validate that all required responses are provided
-    const requiredResponses = []
+    const requiredResponses: string[] = []
     invitation.guests.forEach(guest => {
       if (invitation.invitedToFriday) requiredResponses.push(`${guest.id}-friday`)
       if (invitation.invitedToSaturday) requiredResponses.push(`${guest.id}-saturday`)
@@ -73,7 +92,7 @@ export default function RSVPPage() {
     
     const missingResponses = requiredResponses.some(key => {
       const [guestId, event] = key.split('-')
-      const response = guestResponses[guestId]?.[`${event}Response`]
+      const response = guestResponses[guestId]?.[`${event}Response` as keyof typeof guestResponses[string]]
       return !response
     })
     
@@ -88,7 +107,9 @@ export default function RSVPPage() {
         invitationId: invitation.id,
         guestResponses: Object.entries(guestResponses).map(([guestId, responses]) => ({
           guestId,
-          ...responses
+          fridayResponse: responses.fridayResponse,
+          saturdayResponse: responses.saturdayResponse,
+          sundayResponse: responses.sundayResponse
         })),
         ...invitationNotes
       }
@@ -112,23 +133,24 @@ export default function RSVPPage() {
         setError(data.error || 'Failed to submit RSVP')
       }
     } catch (error) {
+      console.error('RSVP submission error:', error)
       setError('Failed to submit RSVP. Please try again.')
     } finally {
       setLoading(false)
     }
   }
 
-  const updateGuestResponse = (guestId, event, response) => {
+  const updateGuestResponse = (guestId: string, event: string, response: string) => {
     setGuestResponses(prev => ({
       ...prev,
       [guestId]: {
         ...prev[guestId],
-        [`${event}Response`]: response
+        [`${event}Response`]: response as Response
       }
     }))
   }
 
-  const updateInvitationNotes = (field, value) => {
+  const updateInvitationNotes = (field: keyof InvitationNotes, value: string) => {
     setInvitationNotes(prev => ({ ...prev, [field]: value }))
   }
 
@@ -185,6 +207,17 @@ export default function RSVPPage() {
               {loading ? 'Finding...' : 'Find My Invitation'}
             </button>
           </form>
+        </div>
+      </div>
+    )
+  }
+
+  // Ensure we have data before rendering the form
+  if (!invitation || !searchedGuest) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 px-4">
+        <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+          <p className="text-center">Loading...</p>
         </div>
       </div>
     )
@@ -333,7 +366,7 @@ export default function RSVPPage() {
                 </label>
                 <textarea
                   id="dietary"
-                  rows="3"
+                  rows={3}
                   value={invitationNotes.dietaryRestrictions}
                   onChange={(e) => updateInvitationNotes('dietaryRestrictions', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -347,7 +380,7 @@ export default function RSVPPage() {
                 </label>
                 <textarea
                   id="notes"
-                  rows="3"
+                  rows={3}
                   value={invitationNotes.notes}
                   onChange={(e) => updateInvitationNotes('notes', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
