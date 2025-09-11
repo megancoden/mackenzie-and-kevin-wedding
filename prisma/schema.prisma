@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Invitation {
+  id          String   @id @default(cuid())
+  invitationCode String @unique // Optional: for easier lookup
+  
+  // Invitation settings - what events this invitation covers
+  invitedToFriday   Boolean @default(false)
+  invitedToSaturday Boolean @default(true)
+  invitedToSunday   Boolean @default(false)
+  
+  // RSVP status for the entire invitation
+  rsvpStatus    RsvpStatus @default(PENDING)
+  rsvpSubmittedAt DateTime?
+  
+  // Additional info that applies to the whole invitation
+  dietaryRestrictions String?
+  notes             String?
+  
+  // Relationships
+  guests        Guest[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Guest {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String?
+  phone     String?
+  
+  // Guest type
+  guestType GuestType @default(NAMED_GUEST)
+  
+  // Individual RSVP responses for each event
+  fridayResponse    Response?
+  saturdayResponse  Response?
+  sundayResponse    Response?
+  
+  // Relationship to invitation
+  invitationId String
+  invitation   Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([firstName, lastName]) // For faster name searches
+}
+
+enum GuestType {
+  NAMED_GUEST    // Specifically named guest (e.g., "John Smith")
+  PLUS_ONE       // Generic plus one (e.g., "John's Plus One")
+  CHILD          // Child guest (might have different meal options)
+}
+
+enum RsvpStatus {
+  PENDING
+  COMPLETED
+}
+
+enum Response {
+  YES
+  NO
+}
