@@ -1,6 +1,7 @@
 'use client'
 
 import { FormStep, InvitationWithGuests, Guest, Response } from '@/types'
+import Link from 'next/link'
 import { useState, FormEvent } from 'react'
 
 interface InvitationNotes {
@@ -206,6 +207,9 @@ export default function RSVPPage() {
             >
               {loading ? 'Finding...' : 'Find My Invitation'}
             </button>
+            <Link href="/" legacyBehavior>
+              <a className="underline underline-offset-4 hover:text-gray-700">Return to home page</a>
+            </Link>
           </form>
         </div>
       </div>
@@ -224,196 +228,190 @@ export default function RSVPPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold mb-2">RSVP for Your Party</h1>
-          <p className="text-gray-600">
-            Found invitation for: <span className="font-semibold">{searchedGuest.firstName} {searchedGuest.lastName}</span>
-          </p>
-          <p className="text-sm text-gray-500">
-            {invitation.rsvpStatus === 'COMPLETED' ? 'Updating previous RSVP' : 'Please respond for all members of your party'}
-          </p>
-        </div>
-        
-        <form onSubmit={handleRSVPSubmit}>
-          {/* Guest List */}
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold mb-4">Your Party ({invitation.guests.length} guest{invitation.guests.length > 1 ? 's' : ''})</h2>
-            
-            <div className="space-y-6">
-              {invitation.guests.map(guest => (
-                <div key={guest.id} className="border rounded-lg p-4 bg-gray-50">
-                  <h3 className="font-medium mb-4">
-                    {guest.firstName} {guest.lastName}
-                    {guest.guestType === 'PLUS_ONE' && <span className="text-sm text-gray-500 ml-2">(Plus One)</span>}
-                    {guest.guestType === 'CHILD' && <span className="text-sm text-gray-500 ml-2">(Child)</span>}
-                  </h3>
-                  
-                  <div className="grid gap-4 md:grid-cols-3">
-                    {/* Friday Event */}
-                    {invitation.invitedToFriday && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-700 mb-2">Friday Welcome Dinner</h4>
-                        <div className="space-y-2">
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              name={`friday-${guest.id}`}
-                              value="YES"
-                              checked={guestResponses[guest.id]?.fridayResponse === 'YES'}
-                              onChange={(e) => updateGuestResponse(guest.id, 'friday', e.target.value)}
-                              className="mr-2"
-                              required
-                            />
-                            <span className="text-sm">Will attend</span>
-                          </label>
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              name={`friday-${guest.id}`}
-                              value="NO"
-                              checked={guestResponses[guest.id]?.fridayResponse === 'NO'}
-                              onChange={(e) => updateGuestResponse(guest.id, 'friday', e.target.value)}
-                              className="mr-2"
-                              required
-                            />
-                            <span className="text-sm">Cannot attend</span>
-                          </label>
-                        </div>
-                      </div>
-                    )}
+                      <><Link href="/" legacyBehavior>
+      <a className="underline underline-offset-4 hover:text-gray-700">Return to home page</a>
+    </Link><div className="min-h-screen bg-gray-50 py-12 px-4">
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+          <div className="mb-6 text-center">
+            <h1 className="text-2xl font-bold mb-2">RSVP for Your Party</h1>
+            <p className="text-gray-600">
+              Found invitation for: <span className="font-semibold">{searchedGuest.firstName} {searchedGuest.lastName}</span>
+            </p>
+            <p className="text-sm text-gray-500">
+              {invitation.rsvpStatus === 'COMPLETED' ? 'Updating previous RSVP' : 'Please respond for all members of your party'}
+            </p>
+          </div>
 
-                    {/* Saturday Event */}
-                    {invitation.invitedToSaturday && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-700 mb-2">Saturday Wedding</h4>
-                        <div className="space-y-2">
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              name={`saturday-${guest.id}`}
-                              value="YES"
-                              checked={guestResponses[guest.id]?.saturdayResponse === 'YES'}
-                              onChange={(e) => updateGuestResponse(guest.id, 'saturday', e.target.value)}
-                              className="mr-2"
-                              required
-                            />
-                            <span className="text-sm">Will attend</span>
-                          </label>
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              name={`saturday-${guest.id}`}
-                              value="NO"
-                              checked={guestResponses[guest.id]?.saturdayResponse === 'NO'}
-                              onChange={(e) => updateGuestResponse(guest.id, 'saturday', e.target.value)}
-                              className="mr-2"
-                              required
-                            />
-                            <span className="text-sm">Cannot attend</span>
-                          </label>
-                        </div>
-                      </div>
-                    )}
+          <form onSubmit={handleRSVPSubmit}>
+            {/* Guest List */}
+            <div className="mb-8">
+              <h2 className="text-lg font-semibold mb-4">Your Party ({invitation.guests.length} guest{invitation.guests.length > 1 ? 's' : ''})</h2>
 
-                    {/* Sunday Event */}
-                    {invitation.invitedToSunday && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-700 mb-2">Sunday Brunch</h4>
-                        <div className="space-y-2">
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              name={`sunday-${guest.id}`}
-                              value="YES"
-                              checked={guestResponses[guest.id]?.sundayResponse === 'YES'}
-                              onChange={(e) => updateGuestResponse(guest.id, 'sunday', e.target.value)}
-                              className="mr-2"
-                              required
-                            />
-                            <span className="text-sm">Will attend</span>
-                          </label>
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              name={`sunday-${guest.id}`}
-                              value="NO"
-                              checked={guestResponses[guest.id]?.sundayResponse === 'NO'}
-                              onChange={(e) => updateGuestResponse(guest.id, 'sunday', e.target.value)}
-                              className="mr-2"
-                              required
-                            />
-                            <span className="text-sm">Cannot attend</span>
-                          </label>
+              <div className="space-y-6">
+                {invitation.guests.map(guest => (
+                  <div key={guest.id} className="border rounded-lg p-4 bg-gray-50">
+                    <h3 className="font-medium mb-4">
+                      {guest.firstName} {guest.lastName}
+                      {guest.guestType === 'PLUS_ONE' && <span className="text-sm text-gray-500 ml-2">(Plus One)</span>}
+                      {guest.guestType === 'CHILD' && <span className="text-sm text-gray-500 ml-2">(Child)</span>}
+                    </h3>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                      {/* Friday Event */}
+                      {invitation.invitedToFriday && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-2">Friday Welcome Dinner</h4>
+                          <div className="space-y-2">
+                            <label className="flex items-center">
+                              <input
+                                type="radio"
+                                name={`friday-${guest.id}`}
+                                value="YES"
+                                checked={guestResponses[guest.id]?.fridayResponse === 'YES'}
+                                onChange={(e) => updateGuestResponse(guest.id, 'friday', e.target.value)}
+                                className="mr-2"
+                                required />
+                              <span className="text-sm">Will attend</span>
+                            </label>
+                            <label className="flex items-center">
+                              <input
+                                type="radio"
+                                name={`friday-${guest.id}`}
+                                value="NO"
+                                checked={guestResponses[guest.id]?.fridayResponse === 'NO'}
+                                onChange={(e) => updateGuestResponse(guest.id, 'friday', e.target.value)}
+                                className="mr-2"
+                                required />
+                              <span className="text-sm">Cannot attend</span>
+                            </label>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+
+                      {/* Saturday Event */}
+                      {invitation.invitedToSaturday && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-2">Saturday Wedding</h4>
+                          <div className="space-y-2">
+                            <label className="flex items-center">
+                              <input
+                                type="radio"
+                                name={`saturday-${guest.id}`}
+                                value="YES"
+                                checked={guestResponses[guest.id]?.saturdayResponse === 'YES'}
+                                onChange={(e) => updateGuestResponse(guest.id, 'saturday', e.target.value)}
+                                className="mr-2"
+                                required />
+                              <span className="text-sm">Will attend</span>
+                            </label>
+                            <label className="flex items-center">
+                              <input
+                                type="radio"
+                                name={`saturday-${guest.id}`}
+                                value="NO"
+                                checked={guestResponses[guest.id]?.saturdayResponse === 'NO'}
+                                onChange={(e) => updateGuestResponse(guest.id, 'saturday', e.target.value)}
+                                className="mr-2"
+                                required />
+                              <span className="text-sm">Cannot attend</span>
+                            </label>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Sunday Event */}
+                      {invitation.invitedToSunday && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-2">Sunday Brunch</h4>
+                          <div className="space-y-2">
+                            <label className="flex items-center">
+                              <input
+                                type="radio"
+                                name={`sunday-${guest.id}`}
+                                value="YES"
+                                checked={guestResponses[guest.id]?.sundayResponse === 'YES'}
+                                onChange={(e) => updateGuestResponse(guest.id, 'sunday', e.target.value)}
+                                className="mr-2"
+                                required />
+                              <span className="text-sm">Will attend</span>
+                            </label>
+                            <label className="flex items-center">
+                              <input
+                                type="radio"
+                                name={`sunday-${guest.id}`}
+                                value="NO"
+                                checked={guestResponses[guest.id]?.sundayResponse === 'NO'}
+                                onChange={(e) => updateGuestResponse(guest.id, 'sunday', e.target.value)}
+                                className="mr-2"
+                                required />
+                              <span className="text-sm">Cannot attend</span>
+                            </label>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Additional Information */}
+            <div className="mb-8">
+              <h2 className="text-lg font-semibold mb-4">Additional Information</h2>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label htmlFor="dietary" className="block text-sm font-medium text-gray-700 mb-2">
+                    Dietary Restrictions (for entire party)
+                  </label>
+                  <textarea
+                    id="dietary"
+                    rows={3}
+                    value={invitationNotes.dietaryRestrictions}
+                    onChange={(e) => updateInvitationNotes('dietaryRestrictions', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Any allergies, dietary preferences, or special requests..." />
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Additional Information */}
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold mb-4">Additional Information</h2>
-            
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <label htmlFor="dietary" className="block text-sm font-medium text-gray-700 mb-2">
-                  Dietary Restrictions (for entire party)
-                </label>
-                <textarea
-                  id="dietary"
-                  rows={3}
-                  value={invitationNotes.dietaryRestrictions}
-                  onChange={(e) => updateInvitationNotes('dietaryRestrictions', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Any allergies, dietary preferences, or special requests..."
-                />
-              </div>
-
-              <div>
-                <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2">
-                  Special Notes
-                </label>
-                <textarea
-                  id="notes"
-                  rows={3}
-                  value={invitationNotes.notes}
-                  onChange={(e) => updateInvitationNotes('notes', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Any special messages or requests..."
-                />
+                <div>
+                  <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2">
+                    Special Notes
+                  </label>
+                  <textarea
+                    id="notes"
+                    rows={3}
+                    value={invitationNotes.notes}
+                    onChange={(e) => updateInvitationNotes('notes', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Any special messages or requests..." />
+                </div>
               </div>
             </div>
-          </div>
 
-          {error && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-              {error}
+            {error && (
+              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
+                {error}
+              </div>
+            )}
+
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => setStep('lookup')}
+                className="flex-1 bg-gray-300 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-400 font-medium"
+              >
+                Back to Search
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex-2 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium"
+              >
+                {loading ? 'Submitting...' : 'Submit RSVP for All Guests'}
+              </button>
             </div>
-          )}
-
-          <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={() => setStep('lookup')}
-              className="flex-1 bg-gray-300 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-400 font-medium"
-            >
-              Back to Search
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-2 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium"
-            >
-              {loading ? 'Submitting...' : 'Submit RSVP for All Guests'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+          </form>
+        </div>
+      </div></>
   )
 }
