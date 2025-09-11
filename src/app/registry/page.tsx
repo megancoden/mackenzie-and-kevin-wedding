@@ -5,6 +5,7 @@ export default function RegistryPage() {
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
             This is where the registry will be.
+            It will contain links to the other sites we are registered with.
           </li>
         </ol>
       </main>
