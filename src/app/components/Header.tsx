@@ -68,8 +68,9 @@ export default function Header() {
                 </p>
               </Link>
             </div>
+            {/* Spacer - Pinned to Right */}
+            <div style={{ width: '108px', paddingLeft: '32px', height: '100%' }}></div>
           </div>
-        {/* </div> */}
       </header>
 
       {/* Overlay */}
