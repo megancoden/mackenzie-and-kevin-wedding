@@ -157,7 +157,7 @@ export default function RSVPPage() {
 
   if (step === 'lookup') {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="min-h-screen bg-gray-50 py-12 px-4 background">
         <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
           <h1 className="text-2xl font-bold text-center mb-6">RSVP</h1>
           
