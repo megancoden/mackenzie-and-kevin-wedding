@@ -15,8 +15,6 @@ export default function Header() {
     { href: "/rsvp", label: "RSVP" },
     { href: "/registry", label: "Registry" },
     { href: "/photos", label: "Photos" },
-    // { href: "/travel", label: "Travel" },
-    // { href: "/contact", label: "Contact" },
   ];
 
   const openMenu = () => {
@@ -31,7 +29,6 @@ export default function Header() {
   return (
     <>
   <header className="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50" style={{ height: '96px', minHeight: '96px', paddingBottom: '8px'}}>
-        {/* <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> */}
           <div className="flex items-center h-full relative">
             {/* Menu Button - Pinned to Left */}
             <div className="flex-shrink-0 flex items-center justify-start" style={{ minWidth: '48px', paddingLeft: '32px', height: '100%' }}>
@@ -39,7 +36,7 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={openMenu}
-                  className="p-2 rounded-md text-gray-700 hover:text-pink-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+                  className="p-2 rounded-md text-[var(--wedding-secondary-dark)] hover:text-[var(--wedding-primary-dark)] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] transition-colors"
                   aria-label="Toggle menu"
                   title="Menu"
                 >
@@ -60,10 +57,10 @@ export default function Header() {
                 className="block"
                 onClick={closeMenu}
               >
-                <h1 className="font-playfair text-4xl md:text-5xl text-gray-800 hover:text-pink-600 transition-colors">
+                <h1 className="header-title hover:!text-[var(--wedding-primary-dark)] transition-colors">
                   Mackenzie & Kevin
                 </h1>
-                <p className="font-lato text-sm text-gray-600 mt-1 tracking-wide" style={{ textAlign: 'center', paddingLeft: '32px', paddingRight: '32px' }}>
+                <p className="header-subtitle">
                   October 24, 2026
                 </p>
               </Link>
@@ -72,15 +69,6 @@ export default function Header() {
             <div style={{ width: '108px', paddingLeft: '32px', height: '100%' }}></div>
           </div>
       </header>
-
-      {/* Overlay */}
-      {/* {isMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
-          style={{ top: '96px' }}
-          onClick={closeMenu}
-        />
-      )} */}
  
       {/* Sidebar - Slides in from Left */}
       {isMenuOpen && (
@@ -91,7 +79,7 @@ export default function Header() {
               <h2 className="font-playfair text-2xl text-gray-800">Menu</h2>
               <button
                 onClick={closeMenu}
-                className="p-2 rounded-md text-gray-700 hover:text-pink-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="p-2 rounded-md text-wedding-secondary-dark hover:!text-[var(--wedding-primary-dark)] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)]"
                 aria-label="Close menu"
               >
                 <X className="h-6 w-6" />
@@ -107,8 +95,8 @@ export default function Header() {
                   onClick={closeMenu}
                   className={`block px-4 py-3 rounded-lg font-lato text-lg transition-colors ${
                     pathname === item.href
-                      ? "text-pink-600 bg-pink-50 border-l-4 border-pink-600"
-                      : "text-gray-700 hover:text-pink-600 hover:bg-gray-50"
+                      ? "text-wedding-primary-dark bg-wedding-primary-light border-l-4 border-wedding-primary"
+                      : "text-wedding-secondary-dark hover:!text-[var(--wedding-primary-dark)] hover:bg-gray-50"
                   }`}
                 >
                   {item.label}

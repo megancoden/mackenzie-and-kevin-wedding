@@ -159,15 +159,15 @@ export default function RSVPPage() {
     return (
       <div className="min-h-screen py-12 px-4 background pt-[124px]">
         <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-2xl font-bold text-center mb-6">RSVP</h1>
+          <h1 className="text-wedding-secondary-dark text-2xl font-bold text-center mb-6">RSVP</h1>
           
-          <p className="text-gray-600 text-center mb-6 font-lato">
+          <p className="rsvp-header-text text-lg">
             Enter any name from your invitation to RSVP for your entire party.
           </p>
           
           <form onSubmit={handleLookup}>
             <div className="mb-4">
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2 font-lato">
+              <label htmlFor="firstName" className="rsvp-header-text">
                 First Name
               </label>
               <input
@@ -175,13 +175,13 @@ export default function RSVPPage() {
                 id="firstName"
                 name="firstName"
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-lato"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 rsvp-body-text"
                 placeholder="Enter any first name on your invitation"
               />
             </div>
             
             <div className="mb-6">
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2 font-lato">
+              <label htmlFor="lastName" className="rsvp-header-text">
                 Last Name
               </label>
               <input
@@ -189,7 +189,7 @@ export default function RSVPPage() {
                 id="lastName"
                 name="lastName"
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-lato"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 rsvp-body-text"
                 placeholder="Enter the corresponding last name"
               />
             </div>
@@ -203,7 +203,7 @@ export default function RSVPPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 font-lato"
+              className="w-full bg-wedding-primary-dark text-white py-2 px-4 rounded-md hover:bg-[var(--wedding-primary-light)] hover:text-[var(--wedding-primary-light)] disabled:opacity-50 font-lato"
             >
               {loading ? 'Finding...' : 'Find My Invitation'}
             </button>
