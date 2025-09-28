@@ -1,11 +1,11 @@
 @import "tailwindcss";
 /* this defines the theme for my app */
 
-.font-playfair {
+.fancy-font {
   font-family: var(--font-playfair), serif;
 }
 
-.font-lato {
+.casual-font {
   font-family: var(--font-lato), sans-serif;
 }
 
@@ -47,8 +47,16 @@
   color: var(--wedding-primary-dark) !important;
 }
 
+.text-wedding-secondary {
+  color: var(--wedding-secondary) !important;
+}
+
 .text-wedding-secondary-dark {
   color: var(--wedding-secondary-dark) !important;
+}
+
+.accent-text   {
+  color: var(--wedding-accent) !important;
 }
 
 .bg-wedding-primary {
@@ -61,6 +69,11 @@
 
 .border-wedding-primary {
   border-color: var(--wedding-primary) !important;
+}
+
+.bold-text {
+  font-weight: bold !important;
+  color: var(--wedding-secondary-dark) !important;
 }
 
 @theme inline {
@@ -94,7 +107,33 @@ body {
 .rsvp-body-text {
   font-family: var(--font-lato),
     sans-serif;
-  font-size: text-sm;
+  font-size: 16px;
   color: var(--wedding-secondary);
   margin-bottom: 6;
+}
+
+.rsvp-button {
+  background-color: var(--wedding-primary-dark);
+  color: white  ;
+  padding-top: 0.75rem;
+  /* rounded-md */
+  font-family: var(--font-lato), sans-serif;
+  font-weight: 500;
+  /* font-medium */
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  opacity: 1;
+  flex: 2 2 0%;
+  border-radius: 0.375rem;
+  width: 50%;
+}
+
+.rsvp-button:hover:not(:disabled) {
+  background-color: var(--wedding-primary-light);
+  color: var(--wedding-secondary);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+}
+
+.rsvp-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

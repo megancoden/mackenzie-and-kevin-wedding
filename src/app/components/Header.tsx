@@ -76,7 +76,7 @@ export default function Header() {
           <div className="p-6">
             {/* Close button */}
             <div className="flex justify-between items-center mb-8">
-              <h2 className="font-playfair text-2xl text-gray-800">Menu</h2>
+              <h2 className="fancy-font text-2xl text-gray-800">Menu</h2>
               <button
                 onClick={closeMenu}
                 className="p-2 rounded-md text-wedding-secondary-dark hover:!text-[var(--wedding-primary-dark)] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)]"
@@ -93,7 +93,7 @@ export default function Header() {
                   key={item.href}
                   href={item.href}
                   onClick={closeMenu}
-                  className={`block px-4 py-3 rounded-lg font-lato text-lg transition-colors ${
+                  className={`block px-4 py-3 rounded-lg casual-font text-lg transition-colors ${
                     pathname === item.href
                       ? "text-wedding-primary-dark bg-wedding-primary-light border-l-4 border-wedding-primary"
                       : "text-wedding-secondary-dark hover:!text-[var(--wedding-primary-dark)] hover:bg-gray-50"
@@ -107,9 +107,9 @@ export default function Header() {
             {/* Optional: Wedding Date or Additional Info */}
             <div className="mt-12 pt-8 border-t border-gray-200">
               <div className="text-center">
-                <p className="font-playfair text-lg text-gray-800 mb-2">Save the Date</p>
-                <p className="font-lato text-gray-600">October 24, 2026</p>
-                <p className="font-lato text-sm text-gray-500 mt-1">Michigan</p>
+                <p className="fancy-font text-xl text-wedding-secondary-dark mb-2">Save the Date</p>
+                <p className="casual-font text-wedding-secondary">October 24, 2026</p>
+                <p className="casual-font text-sm text-wedding-secondary mt-1">Michigan</p>
               </div>
             </div>
           </div>

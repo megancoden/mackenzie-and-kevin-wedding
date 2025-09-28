@@ -158,7 +158,7 @@ export default function RSVPPage() {
   if (step === 'lookup') {
     return (
       <div className="min-h-screen py-12 px-4 background pt-[124px]">
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+        <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 ">
           <h1 className="text-wedding-secondary-dark text-2xl font-bold text-center mb-6">RSVP</h1>
           
           <p className="rsvp-header-text text-lg">
@@ -203,7 +203,7 @@ export default function RSVPPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-wedding-primary-dark text-white py-2 px-4 rounded-md hover:bg-[var(--wedding-primary-light)] hover:text-[var(--wedding-primary-light)] disabled:opacity-50 font-lato"
+              className="w-full py-2 px-4 rsvp-button"
             >
               {loading ? 'Finding...' : 'Find My Invitation'}
             </button>
@@ -217,7 +217,7 @@ export default function RSVPPage() {
   if (!invitation || !searchedGuest) {
     return (
       <div className="min-h-screen py-12 px-4 pt-[96px] background">
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 font-lato">
+        <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 casual-font">
           <p className="text-center">Loading...</p>
         </div>
       </div>
@@ -230,11 +230,11 @@ export default function RSVPPage() {
     </Link><div className="min-h-screen py-12 px-4 pt-[96px] background">
         <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
           <div className="mb-6 text-center">
-            <h1 className="text-2xl font-bold font-playfair mb-2">RSVP for Your Party</h1>
-            <p className="text-gray-600 font-lato">
-              Found invitation for: <span className="font-semibold font-lato">{searchedGuest.firstName} {searchedGuest.lastName}</span>
+            <h1 className="text-2xl font-bold fancy-font text-wedding-secondary-dark mb-2">RSVP for Your Party</h1>
+            <p className="text-wedding-secondary casual-font">
+              Found invitation for: <span className="casual-font text-wedding-secondary-dark font-bold">{searchedGuest.firstName} {searchedGuest.lastName}</span>
             </p>
-            <p className="text-sm text-gray-500 font-lato">
+            <p className="text-wedding-secondary casual-font">
               {invitation.rsvpStatus === 'COMPLETED' ? 'Updating previous RSVP' : 'Please respond for all members of your party'}
             </p>
           </div>
@@ -242,24 +242,26 @@ export default function RSVPPage() {
           <form onSubmit={handleRSVPSubmit}>
             {/* Guest List */}
             <div className="mb-8">
-              <h2 className="text-lg font-semibold font-lato mb-4">Your Party ({invitation.guests.length} guest{invitation.guests.length > 1 ? 's' : ''})</h2>
+              <h2 className="text-lg fancy-font mb-4 bold-text text-xl">Your Party ({invitation.guests.length} guest{invitation.guests.length > 1 ? 's' : ''})</h2>
 
               <div className="space-y-6">
                 {invitation.guests.map(guest => (
-                  <div key={guest.id} className="border rounded-lg p-4 background">
-                    <h3 className="font-medium mb-4 font-lato">
+                  <div key={guest.id} className="border border-[var(--wedding-primary-dark)] rounded-lg p-4 background">
+                    <h3 className="font-bold text-wedding-secondary-dark mb-3 fancy-font text-xl">
                       {guest.firstName} {guest.lastName}
-                      {guest.guestType === 'PLUS_ONE' && <span className="text-sm text-gray-500 ml-2 font-lato">(Plus One)</span>}
-                      {guest.guestType === 'CHILD' && <span className="text-sm text-gray-500 ml-2 font-lato">(Child)</span>}
+                      <span className="text-wedding-secondary fancy-font ml-1 text-lg">
+                        {guest.guestType === 'PLUS_ONE' && "(Plus One)"}
+                        {guest.guestType === 'CHILD' && "(Child)"}
+                      </span>
                     </h3>
 
                     <div className="grid gap-4 md:grid-cols-3">
                       {/* Friday Event */}
                       {invitation.invitedToFriday && (
                         <div>
-                          <h4 className="text-sm font-medium text-gray-700 mb-2 font-lato">Friday Welcome Dinner</h4>
+                          <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Friday Welcome Dinner</h4>
                           <div className="space-y-2">
-                            <label className="flex items-center">
+                            <label className="flex items-center mb-0">
                               <input
                                 type="radio"
                                 name={`friday-${guest.id}`}
@@ -268,7 +270,7 @@ export default function RSVPPage() {
                                 onChange={(e) => updateGuestResponse(guest.id, 'friday', e.target.value)}
                                 className="mr-2"
                                 required />
-                              <span className="text-sm font-lato">Will attend</span>
+                              <span className="rsvp-body-text">Will attend</span>
                             </label>
                             <label className="flex items-center">
                               <input
@@ -279,7 +281,7 @@ export default function RSVPPage() {
                                 onChange={(e) => updateGuestResponse(guest.id, 'friday', e.target.value)}
                                 className="mr-2"
                                 required />
-                              <span className="text-sm font-lato">Cannot attend</span>
+                              <span className="rsvp-body-text">Cannot attend</span>
                             </label>
                           </div>
                         </div>
@@ -288,9 +290,9 @@ export default function RSVPPage() {
                       {/* Saturday Event */}
                       {invitation.invitedToSaturday && (
                         <div>
-                          <h4 className="text-sm font-medium text-gray-700 mb-2 font-lato">Saturday Wedding</h4>
+                          <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Saturday Wedding</h4>
                           <div className="space-y-2">
-                            <label className="flex items-center">
+                            <label className="flex items-center mb-0">
                               <input
                                 type="radio"
                                 name={`saturday-${guest.id}`}
@@ -299,7 +301,7 @@ export default function RSVPPage() {
                                 onChange={(e) => updateGuestResponse(guest.id, 'saturday', e.target.value)}
                                 className="mr-2"
                                 required />
-                              <span className="text-sm font-lato">Will attend</span>
+                              <span className="rsvp-body-text">Will attend</span>
                             </label>
                             <label className="flex items-center">
                               <input
@@ -310,7 +312,7 @@ export default function RSVPPage() {
                                 onChange={(e) => updateGuestResponse(guest.id, 'saturday', e.target.value)}
                                 className="mr-2"
                                 required />
-                              <span className="text-sm font-lato">Cannot attend</span>
+                              <span className="rsvp-body-text">Cannot attend</span>
                             </label>
                           </div>
                         </div>
@@ -319,9 +321,9 @@ export default function RSVPPage() {
                       {/* Sunday Event */}
                       {invitation.invitedToSunday && (
                         <div>
-                          <h4 className="text-sm font-medium text-gray-700 mb-2 font-lato">Sunday Brunch</h4>
+                          <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Sunday Brunch</h4>
                           <div className="space-y-2">
-                            <label className="flex items-center">
+                            <label className="flex items-center mb-0">
                               <input
                                 type="radio"
                                 name={`sunday-${guest.id}`}
@@ -330,7 +332,7 @@ export default function RSVPPage() {
                                 onChange={(e) => updateGuestResponse(guest.id, 'sunday', e.target.value)}
                                 className="mr-2"
                                 required />
-                              <span className="text-sm font-lato">Will attend</span>
+                              <span className="rsvp-body-text">Will attend</span>
                             </label>
                             <label className="flex items-center">
                               <input
@@ -341,7 +343,7 @@ export default function RSVPPage() {
                                 onChange={(e) => updateGuestResponse(guest.id, 'sunday', e.target.value)}
                                 className="mr-2"
                                 required />
-                              <span className="text-sm font-lato">Cannot attend</span>
+                              <span className="rsvp-body-text">Cannot attend</span>
                             </label>
                           </div>
                         </div>
@@ -354,11 +356,11 @@ export default function RSVPPage() {
 
             {/* Additional Information */}
             <div className="mb-8">
-              <h2 className="text-lg font-semibold mb-4 font-lato">Additional Information</h2>
+              <h2 className="header-title mb-2" style={{ fontSize: "24px", fontWeight: "bold"}}>Additional Information</h2>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <label htmlFor="dietary" className="block text-sm font-medium text-gray-700 mb-2 font-lato">
+                  <label htmlFor="dietary" className="block rsvp-body-text mb-1">
                     Dietary Restrictions (for entire party)
                   </label>
                   <textarea
@@ -366,12 +368,12 @@ export default function RSVPPage() {
                     rows={3}
                     value={invitationNotes.dietaryRestrictions}
                     onChange={(e) => updateInvitationNotes('dietaryRestrictions', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-lato"
+                    className="w-full px-3 py-2 border border-[var(--wedding-primary-dark)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] casual-font"
                     placeholder="Any allergies, dietary preferences, or special requests..." />
                 </div>
 
                 <div>
-                  <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2 font-lato">
+                  <label htmlFor="notes" className="block rsvp-body-text mb-1">
                     Special Notes
                   </label>
                   <textarea
@@ -379,14 +381,14 @@ export default function RSVPPage() {
                     rows={3}
                     value={invitationNotes.notes}
                     onChange={(e) => updateInvitationNotes('notes', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-lato"
+                    className="w-full px-3 py-2 border border-[var(--wedding-primary-dark)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] casual-font"
                     placeholder="Any special messages or requests..." />
                 </div>
               </div>
             </div>
 
             {error && (
-              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm font-lato">
+              <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm casual-font">
                 {error}
               </div>
             )}
@@ -395,14 +397,14 @@ export default function RSVPPage() {
               <button
                 type="button"
                 onClick={() => setStep('lookup')}
-                className="flex-1 bg-gray-300 text-gray-700 py-3 px-4 rounded-md hover:bg-gray-400 font-medium font-lato"
+                className="py-3 px-6 rsvp-button !bg-[var(--wedding-primary-light)] text-wedding-secondary hover:!bg-[var(--wedding-primary-dark)] hover:!text-[var(--wedding-accent)]"
               >
                 Back to Search
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-2 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium font-lato"
+                className="py-3 px-6 rsvp-button"
               >
                 {loading ? 'Submitting...' : 'Submit RSVP for All Guests'}
               </button>
