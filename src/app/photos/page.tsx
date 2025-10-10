@@ -4,7 +4,7 @@ export default function PhotosPage() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
-            This is where the photos will be displayed.
+            This is where the photos will be displayed. Test.
           </li>
         </ol>
       </main>
