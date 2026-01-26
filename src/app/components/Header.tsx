@@ -44,7 +44,7 @@ export default function Header() {
                   aria-label="Toggle menu"
                   title="Menu"
                 >
-                    <div className="flex flex-row items-center text-base sm:text-2xl gap-2">
+                    <div className="flex flex-row items-center text-base sm:text-xl gap-1 sm:gap-2">
                   <Menu className="h-5 w-5 sm:h-6 sm:w-6" textAnchor="end" />
                   <span className="hidden sm:inline">Menu</span>
                   </div>
@@ -61,10 +61,10 @@ export default function Header() {
                 className="block text-center"
                 onClick={closeMenu}
               >
-                <h1 className="header-title text-2xl sm:text-4xl md:text-5xl hover:!text-[var(--wedding-primary-dark)] transition-colors">
+                <h1 className="header-title text-xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight hover:!text-[var(--wedding-primary-dark)] transition-colors">
                   Mackenzie & Kevin
                 </h1>
-                <p className="header-subtitle text-sm sm:text-base md:text-lg">
+                <p className="header-subtitle text-xs sm:text-sm md:text-base leading-tight">
                   October 17, 2026
                 </p>
               </Link>
