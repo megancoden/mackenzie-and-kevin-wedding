@@ -32,10 +32,10 @@ export default function Header() {
 
   return (
     <>
-  <header className="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50" style={{ height: '96px', minHeight: '96px', paddingBottom: '8px'}}>
+  <header className="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50 h-20 sm:h-24 min-h-[80px] sm:min-h-[96px] pb-2">
           <div className="flex items-center h-full relative">
             {/* Menu Button - Pinned to Left */}
-            <div className="flex-shrink-0 flex items-center justify-start" style={{ minWidth: '48px', paddingLeft: '32px', height: '100%' }}>
+            <div className="flex-shrink-0 flex items-center justify-start pl-4 sm:pl-8 h-full">
               {!isMenuOpen ? (
                 <button
                   type="button"
@@ -44,39 +44,39 @@ export default function Header() {
                   aria-label="Toggle menu"
                   title="Menu"
                 >
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', fontSize: '24px', gap: '8px', width: '92px' }}>
-                  <Menu className="h-6 w-6" textAnchor="end" />
-                  Menu
+                    <div className="flex flex-row items-center text-base sm:text-2xl gap-2">
+                  <Menu className="h-5 w-5 sm:h-6 sm:w-6" textAnchor="end" />
+                  <span className="hidden sm:inline">Menu</span>
                   </div>
                 </button>
               ) : (
-                // make a div  the same width as the button so the names stay centered
-                <div style={{ width: '108px', paddingLeft: '32px', height: '100%' }}></div>
+                // make a div the same width as the button so the names stay centered
+                <div className="w-10 sm:w-[108px]"></div>
               )}
             </div>
             {/* Names - Centered */}
-            <div className="flex-1 flex justify-center items-center" style={{ height: '100%' }}>
+            <div className="flex-1 flex justify-center items-center h-full">
               <Link 
                 href="/" 
-                className="block"
+                className="block text-center"
                 onClick={closeMenu}
               >
-                <h1 className="header-title hover:!text-[var(--wedding-primary-dark)] transition-colors">
+                <h1 className="header-title text-2xl sm:text-4xl md:text-5xl hover:!text-[var(--wedding-primary-dark)] transition-colors">
                   Mackenzie & Kevin
                 </h1>
-                <p className="header-subtitle">
+                <p className="header-subtitle text-sm sm:text-base md:text-lg">
                   October 17, 2026
                 </p>
               </Link>
             </div>
             {/* Spacer - Pinned to Right */}
-            <div style={{ width: '108px', paddingLeft: '32px', height: '100%' }}></div>
+            <div className="w-10 sm:w-[108px]"></div>
           </div>
       </header>
  
       {/* Sidebar - Slides in from Left */}
       {isMenuOpen && (
-        <div className={`fixed top-[96px] left-0 h-[calc(100vh-96px)] w-80 bg-white transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}>
+        <div className={`fixed top-20 sm:top-24 left-0 h-[calc(100vh-80px)] sm:h-[calc(100vh-96px)] w-80 bg-white transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}>
           <div className="p-6">
             {/* Close button */}
             <div className="flex justify-between items-center mb-8">
