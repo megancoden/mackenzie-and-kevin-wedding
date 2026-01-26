@@ -101,7 +101,7 @@ export default function PhotoCarousel() {
     );
   };
 
-  const goToSlide = (index) => {
+  const goToSlide = (index: number) => {
     setCurrentIndex(index);
   };
 
