@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Lato } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
+import Link from "next/link";
 
 // Elegant serif font for headings/names
 const playfairDisplay = Playfair_Display({
@@ -39,7 +40,8 @@ export default function RootLayout({
         </main>
         <footer className="bg-gray-50 border-t border-gray-200 py-8 mt-12">
           <div className="max-w-6xl mx-auto px-4 text-center text-wedding-secondary-dark casual-font">
-            <p>&copy; 2026 Mackenzie & Kevin. Made with love by Megan Coden.</p>
+            <p>&copy; 2026 Mackenzie & Kevin. Made with love by{' '}
+              <Link href="https://github.com/megancoden" className="underline hover:text-[var(--wedding-primary-dark)]">Megan Coden</Link>.</p>
           </div>
         </footer>
       </body>

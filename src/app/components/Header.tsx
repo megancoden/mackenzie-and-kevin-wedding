@@ -12,13 +12,13 @@ export default function Header() {
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/rsvp", label: "RSVP" },
+    // { href: "/rsvp", label: "RSVP" },
+    { href: "/eventInfo", label: "Event Info" },
     { href: "/registry", label: "Registry" },
     { href: "/photos", label: "Photos" },
-    { href: "/eventInfo", label: "Event Info" },
     { href: "/travel", label: "Travel" },
     { href: "/q+a", label: "Q & A" },
-    { href: "/megans-registry", label: "Megan's Registry" },
+    // { href: "/megans-registry", label: "Megan's Registry" },
   ];
 
   const openMenu = () => {
@@ -76,7 +76,7 @@ export default function Header() {
  
       {/* Sidebar - Slides in from Left */}
       {isMenuOpen && (
-        <div className={`fixed top-[96px] left-0 h-[calc(100vh-96px)] w-80 bg-white transform transition-transform duration-300 ease-in-out z-50`}>
+        <div className={`fixed top-[96px] left-0 h-[calc(100vh-96px)] w-80 bg-white transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}>
           <div className="p-6">
             {/* Close button */}
             <div className="flex justify-between items-center mb-8">

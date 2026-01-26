@@ -138,3 +138,10 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.qa-title {
+  font-family: var(--font-playfair), serif;
+  font-size: 1.75rem;
+  color: var(--wedding-secondary-dark);
+  margin-top: 8;
+}
