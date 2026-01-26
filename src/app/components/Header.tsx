@@ -15,6 +15,10 @@ export default function Header() {
     { href: "/rsvp", label: "RSVP" },
     { href: "/registry", label: "Registry" },
     { href: "/photos", label: "Photos" },
+    { href: "/eventInfo", label: "Event Info" },
+    { href: "/travel", label: "Travel" },
+    { href: "/q+a", label: "Q & A" },
+    { href: "/megans-registry", label: "Megan's Registry" },
   ];
 
   const openMenu = () => {
@@ -61,7 +65,7 @@ export default function Header() {
                   Mackenzie & Kevin
                 </h1>
                 <p className="header-subtitle">
-                  October 24, 2026
+                  October 17, 2026
                 </p>
               </Link>
             </div>
@@ -108,8 +112,8 @@ export default function Header() {
             <div className="mt-12 pt-8 border-t border-gray-200">
               <div className="text-center">
                 <p className="fancy-font text-xl text-wedding-secondary-dark mb-2">Save the Date</p>
-                <p className="casual-font text-wedding-secondary">October 24, 2026</p>
-                <p className="casual-font text-sm text-wedding-secondary mt-1">Michigan</p>
+                <p className="casual-font text-wedding-secondary">October 17, 2026</p>
+                <p className="casual-font text-sm text-wedding-secondary mt-1">West Bloomfield, Michigan</p>
               </div>
             </div>
           </div>

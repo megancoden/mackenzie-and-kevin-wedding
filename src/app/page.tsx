@@ -15,25 +15,39 @@ export default function HomePage() {
             />
           </div>
           <div className="casual-font grid grid-rows-[20px_1fr_20px] items-center justify-items-center">
-            <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-              <div>
-                This is Mackenzie and Kevin&apos;s wedding website.
-                To RSVP, please click{' '}
-                <Link href="/rsvp" legacyBehavior>
-                  <a className="underline underline-offset-4 hover:text-gray-700">here</a>
-                </Link>.
-                More details to come!
+            <main className="flex flex-col gap-[32px] row-start-2 items-center align-items-center">
+              <div
+                className="text-center rsvp-header-text"
+              >
+                <div className="header-title">
+                  WEDDING DETAILS
+                </div>
+                <div>
+                  October 17, 2026
+                </div>
+                <div>
+                  4:00 - 10:00 PM
+                </div>
+                <div>
+                  Bay Pointe Golf Club
+                </div>
+                <div>
+                  4001 Haggerty Rd, West Bloomfield, MI 48323
+                </div>
+                <div>
+                  Attire: No heels, no ties
+                </div>
+                <div>
+                  Ceremony followed by dinner and dancing
+                </div>
               </div>
-              <div>
-                <Link href="/registry" legacyBehavior>
-                  <a className="underline underline-offset-4 hover:text-gray-700">View our registry</a>
+              <button
+                className="rsvp-button"
+              >
+                <Link href="/rsvp">
+                  RSVP NOW
                 </Link>
-              </div>
-              <div>
-                <Link href="/photos" legacyBehavior>
-                  <a className="underline underline-offset-4 hover:text-gray-700">View our photos</a>
-                </Link>
-              </div>
+              </button>
             </main>
           </div>
         </div>
