@@ -32,7 +32,7 @@ export default function Header() {
 
   return (
     <>
-  <header className="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50 h-24 sm:h-24 min-h-[80px] sm:min-h-[96px] pb-2">
+  <header className="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50 h-28 sm:h-32 min-h-[80px] sm:min-h-[96px] pb-2">
           <div className="flex items-center h-full relative">
             {/* Menu Button - Pinned to Left */}
             <div className="flex-shrink-0 flex items-center justify-start pl-4 sm:pl-8 h-full">
