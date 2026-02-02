@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function QandAPage() {
   return (
     <div className="min-h-screen py-12 px-4 pt-[124px] background">
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 mt-8">
           <div className="casual-font items-center">
             <main className="flex flex-col items-center">
               <div className="text-center rsvp-header-text">

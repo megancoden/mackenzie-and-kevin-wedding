@@ -2,8 +2,7 @@ import Link from "next/link";
 
 export default function EventInfoPage() {
   return (
-    // todo: add a map with a pin/directions
-     <div className="min-h-screen py-12 px-4 pt-[124px] background">
+    <div className="min-h-screen py-12 px-4 pt-[124px] background mt-8">
       <main className="flex flex-col items-center">
         <div className="casual-font text-lg text-[var(--wedding-secondary-dark)] bg-white rounded-lg px-8 py-4">
           <div className="text-center rsvp-header-text">
