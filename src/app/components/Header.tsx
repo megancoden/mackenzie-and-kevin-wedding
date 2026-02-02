@@ -12,7 +12,7 @@ export default function Header() {
 
   const navItems = [
     { href: "/", label: "Home" },
-    // { href: "/rsvp", label: "RSVP" },
+    { href: "/rsvp", label: "RSVP" },
     { href: "/eventInfo", label: "Event Info" },
     { href: "/registry", label: "Registry" },
     { href: "/photos", label: "Photos" },
