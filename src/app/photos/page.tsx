@@ -1,13 +1,12 @@
+'use client';
+
+import PhotoCarousel from "../components/PhotoCarousel";
+
+
 export default function PhotosPage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            This is where the photos will be displayed.
-          </li>
-        </ol>
-      </main>
+    <div className="min-h-screen py-12 px-4 pt-[124px] background">
+      <PhotoCarousel />
     </div>
   );
 }

@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import * as XLSX from 'xlsx'
+import { ExcelGuestRow, InvitationWithGuests } from '@/types'
 
 export async function GET() {
   try {
-    const invitations = await prisma.invitation.findMany({
+    const invitations: InvitationWithGuests[] = await prisma.invitation.findMany({
       include: {
         guests: {
           orderBy: [
@@ -17,7 +18,7 @@ export async function GET() {
     })
     
     // Create detailed guest list
-    const guestData = []
+    const guestData: ExcelGuestRow[] = []
     
     invitations.forEach((invitation, invitationIndex) => {
       invitation.guests.forEach((guest, guestIndex) => {

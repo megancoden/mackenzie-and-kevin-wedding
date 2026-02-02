@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function RegistryPage() {
+export default function TravelPage() {
   return (
     <div className="min-h-screen py-12 px-4 pt-[124px] background">
       <main className="flex flex-col items-center">

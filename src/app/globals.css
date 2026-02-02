@@ -1,8 +1,79 @@
 @import "tailwindcss";
 /* this defines the theme for my app */
+
+.fancy-font {
+  font-family: var(--font-playfair), serif;
+}
+
+.casual-font {
+  font-family: var(--font-lato), sans-serif;
+}
+
 :root {
-  --background: #ffffff;
+  --background: #b8e4e8;
   --foreground: #171717;
+  --wedding-primary: #b8e4e8;
+    /* Pink-500 */
+    --wedding-primary-light: #d9e2e2;
+    /* Pink-50 */
+    --wedding-primary-dark: #7f9cae;
+    /* Pink-700 */
+    --wedding-secondary: #64748b;
+    /* Slate-500 */
+    --wedding-secondary-dark: #475569;
+    /* Slate-700 */
+
+    --wedding-accent: #f1f5f9;
+    /* Slate-100 */
+}
+
+.header-title {
+  font-family: var(--font-playfair), serif;
+  font-size: 2.5rem;
+  color: var(--wedding-secondary-dark);
+}
+
+.header-subtitle {
+  font-family: var(--font-lato), sans-serif;
+  font-size: text-sm;
+  color: var(--wedding-secondary); 
+  margin-top: 0.25rem;
+  text-align: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.text-wedding-primary-dark {
+  color: var(--wedding-primary-dark) !important;
+}
+
+.text-wedding-secondary {
+  color: var(--wedding-secondary) !important;
+}
+
+.text-wedding-secondary-dark {
+  color: var(--wedding-secondary-dark) !important;
+}
+
+.accent-text   {
+  color: var(--wedding-accent) !important;
+}
+
+.bg-wedding-primary {
+  background-color: var(--wedding-primary) !important;
+}
+
+.bg-wedding-primary-dark {
+  background-color: var(--wedding-primary-dark) !important;
+}
+
+.border-wedding-primary {
+  border-color: var(--wedding-primary) !important;
+}
+
+.bold-text {
+  font-weight: bold !important;
+  color: var(--wedding-secondary-dark) !important;
 }
 
 @theme inline {
@@ -10,17 +81,67 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-script: var(--font-dancing-script);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Prevent body scroll when menu is open */
+.menu-open {
+  overflow: hidden;
+}
+
+.rsvp-header-text {
+  font-family: var(--font-lato),
+    sans-serif;
+  font-size: text-sm;
+  color: var(--wedding-secondary-dark);
+  text-align: center;
+  margin-bottom: 6;
+}
+
+.rsvp-body-text {
+  font-family: var(--font-lato),
+    sans-serif;
+  font-size: 16px;
+  color: var(--wedding-secondary);
+  margin-bottom: 6;
+}
+
+.rsvp-button {
+  background-color: var(--wedding-primary-dark);
+  color: white  ;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  /* rounded-md */
+  font-family: var(--font-lato), sans-serif;
+  font-weight: 500;
+  /* font-medium */
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  opacity: 1;
+  flex: 2 2 0%;
+  border-radius: 0.375rem;
+  width: 50%;
+}
+
+.rsvp-button:hover:not(:disabled) {
+  background-color: var(--wedding-primary-light);
+  color: var(--wedding-secondary);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+}
+
+.rsvp-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.qa-title {
+  font-family: var(--font-playfair), serif;
+  font-size: 1.75rem;
+  color: var(--wedding-secondary-dark);
+  margin-top: 8;
 }
