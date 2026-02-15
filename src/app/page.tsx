@@ -26,19 +26,19 @@ export default function HomePage() {
                 <div>
                   October 17, 2026
                 </div>
-                <div>
+                {/* <div>
                   6:00 - 11:00 PM
-                </div>
+                </div> */}
                 <div>
                   Bay Pointe Golf Club
                 </div>
                 <div>
                   4001 Haggerty Rd, West Bloomfield, MI 48323
                 </div>
-                <div className="mt-4">
+                {/* <div className="mt-4">
                   Attire: Dressy casual (no ties)
-                </div>
-                <div>
+                </div> */}
+                <div className="mt-4">
                   Ceremony followed by dinner and dancing
                 </div>
               </div>
