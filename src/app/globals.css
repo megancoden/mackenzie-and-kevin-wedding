@@ -10,21 +10,15 @@
 }
 
 :root {
-  --background: #b8e4e8;
+  --background: #b0c2d6; 
   --foreground: #171717;
   --wedding-primary: #b8e4e8;
-    /* Pink-500 */
     --wedding-primary-light: #d9e2e2;
-    /* Pink-50 */
-    --wedding-primary-dark: #7f9cae;
-    /* Pink-700 */
-    --wedding-secondary: #64748b;
-    /* Slate-500 */
-    --wedding-secondary-dark: #475569;
-    /* Slate-700 */
+    --wedding-primary-dark: #58616b;
+    --wedding-secondary: #58616b;
+    --wedding-secondary-dark: #58616b;
 
     --wedding-accent: #f1f5f9;
-    /* Slate-100 */
 }
 
 .header-title {

@@ -17,7 +17,7 @@ export default function Header() {
     { href: "/registry", label: "Registry" },
     { href: "/photos", label: "Photos" },
     { href: "/travel", label: "Travel" },
-    { href: "/q+a", label: "Q & A" },
+    { href: "/faq", label: "FAQ" },
     // { href: "/megans-registry", label: "Megan's Registry" },
   ];
 
@@ -32,7 +32,7 @@ export default function Header() {
 
   return (
     <>
-  <header className="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50 h-28 sm:h-32 min-h-[80px] sm:min-h-[96px] pb-2">
+  <header className="bg-[#f2f5f3] shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-50 h-28 sm:h-32 min-h-[80px] sm:min-h-[96px] pb-2">
           <div className="flex items-center h-full relative">
             {/* Menu Button - Pinned to Left */}
             <div className="flex-shrink-0 flex items-center justify-start pl-4 sm:pl-8 h-full">
@@ -76,7 +76,7 @@ export default function Header() {
  
       {/* Sidebar - Slides in from Left */}
       {isMenuOpen && (
-        <div className={`fixed top-20 sm:top-24 left-0 h-[calc(100vh-80px)] sm:h-[calc(100vh-96px)] w-80 bg-white transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}>
+        <div className={`fixed top-20 sm:top-24 left-0 h-[calc(100vh-80px)] sm:h-[calc(100vh-96px)] w-80 bg-[#f2f5f3] transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}>
           <div className="p-6">
             {/* Close button */}
             <div className="flex justify-between items-center mb-8">

@@ -6,7 +6,7 @@ export default function HomePage() {
       <div className="header-title flex justify-center">
         Save the Date!
       </div>
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <div className="max-w-4xl mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6">
           <div style={{display: 'flex', justifyContent: "center"}}>
             <Image
               src={'/images/IMG_1200.jpg'}
@@ -26,19 +26,19 @@ export default function HomePage() {
                 <div>
                   October 17, 2026
                 </div>
-                <div>
+                {/* <div>
                   6:00 - 11:00 PM
-                </div>
+                </div> */}
                 <div>
                   Bay Pointe Golf Club
                 </div>
                 <div>
                   4001 Haggerty Rd, West Bloomfield, MI 48323
                 </div>
-                <div className="mt-4">
+                {/* <div className="mt-4">
                   Attire: Dressy casual (no ties)
-                </div>
-                <div>
+                </div> */}
+                <div className="mt-4">
                   Ceremony followed by dinner and dancing
                 </div>
               </div>
