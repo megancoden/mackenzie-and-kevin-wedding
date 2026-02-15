@@ -6,7 +6,7 @@ export default function HomePage() {
       <div className="header-title flex justify-center">
         Save the Date!
       </div>
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <div className="max-w-4xl mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6">
           <div style={{display: 'flex', justifyContent: "center"}}>
             <Image
               src={'/images/IMG_1200.jpg'}

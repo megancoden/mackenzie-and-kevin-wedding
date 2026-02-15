@@ -147,7 +147,7 @@ export default function PhotoCarousel() {
   };
 
   return (
-    <div className="w-full mx-auto bg-white rounded-lg shadow-md p-6 my-8">
+    <div className="w-full mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6 my-8">
       <h2 className="header-title mb-4 flex justify-center">Our History</h2>
       
       <div className="relative">
@@ -180,7 +180,7 @@ export default function PhotoCarousel() {
           
           <button
             onClick={goToPrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition z-10"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#f2f5f3]/80 hover:bg-[#f2f5f3] p-2 rounded-full shadow-lg transition z-10"
             aria-label="Previous photo"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -190,7 +190,7 @@ export default function PhotoCarousel() {
           
           <button
             onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition z-10"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#f2f5f3]/80 hover:bg-[#f2f5f3] p-2 rounded-full shadow-lg transition z-10"
             aria-label="Next photo"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

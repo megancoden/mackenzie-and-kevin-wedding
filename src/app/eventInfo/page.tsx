@@ -4,7 +4,7 @@ export default function EventInfoPage() {
   return (
     <div className="min-h-screen py-12 px-4 pt-[124px] background mt-8">
       <main className="flex flex-col items-center">
-        <div className="casual-font text-lg text-[var(--wedding-secondary-dark)] bg-white rounded-lg px-8 py-4">
+        <div className="casual-font text-lg text-[var(--wedding-secondary-dark)] bg-[#f2f5f3] rounded-lg px-8 py-4">
           <div className="text-center rsvp-header-text">
             <div className="header-title">
               WEDDING DETAILS
