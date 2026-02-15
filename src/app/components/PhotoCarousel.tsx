@@ -56,12 +56,6 @@ export default function PhotoCarousel() {
       caption: 'Scenic views on the Inca Trail',
       date: '09/26/2022'
     },
-    // {
-    //   src: '/images/2023-09-19.jpeg',
-    //   alt: 'Photo 9',
-    //   caption: 'Enjoying some lobster in Maine ',
-    //   date: '09/19/2023'
-    // },
     {
       src: '/images/2024-02-17.JPEG',
       alt: 'Photo 10',
@@ -79,13 +73,7 @@ export default function PhotoCarousel() {
       alt: 'Photo 12',
       caption: 'Celebrating our engagement with Roger',
       date: '12/21/2024'
-    },
-    // {
-    //   src: '/images/2025-04-05.JPG',
-    //   alt: 'Photo 13',
-    //   caption: 'New Haven cherry blossom festival',
-    //   date: '04/05/2025'
-    // }, 
+    }, 
     {
       src: '/images/IMG_0473.JPG',
       alt: 'Photo 14',
