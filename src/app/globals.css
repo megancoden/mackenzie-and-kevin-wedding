@@ -12,10 +12,10 @@
 :root {
   --background: #b0c2d6; 
   --foreground: #171717;
-  --wedding-primary: #b8e4e8;
+    --wedding-primary: #b0c2d6;
     --wedding-primary-light: #d9e2e2;
     --wedding-primary-dark: #58616b;
-    --wedding-secondary: #58616b;
+    --wedding-secondary: #7b8795;
     --wedding-secondary-dark: #58616b;
 
     --wedding-accent: #f1f5f9;
