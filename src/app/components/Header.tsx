@@ -40,13 +40,13 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={openMenu}
-                  className="p-2 rounded-md text-[var(--wedding-secondary-dark)] hover:text-[var(--wedding-primary-dark)] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] transition-colors"
+                  className="p-2 rounded-md text-[var(--wedding-primary-dark)] hover:text-[var(--wedding-secondary)] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] transition-colors"
                   aria-label="Toggle menu"
                   title="Menu"
                 >
                     <div className="flex flex-row items-center text-base sm:text-xl gap-1 sm:gap-2">
                   <Menu className="h-5 w-5 sm:h-6 sm:w-6" textAnchor="end" />
-                  <span className="hidden sm:inline">Menu</span>
+                  <span className="hidden sm:inline">Menu</span> 
                   </div>
                 </button>
               ) : (

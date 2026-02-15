@@ -154,12 +154,6 @@ export default function PhotoCarousel() {
                 className="object-contain"
                 priority={index < 3} // Prioritize first 3 images
               />
-              {/* Date overlay - inside each image container */}
-              {index === currentIndex && photo.date && (
-                <div className="absolute bottom-0 right-80 bg-black/60 text-white px-3 py-1 rounded text-sm z-10">
-                  {photo.date}
-                </div>
-              )}
             </div>
           ))}
 
@@ -185,6 +179,11 @@ export default function PhotoCarousel() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
+        </div>
+
+        {/* Date overlay - inside each image container */}
+        <div className="text-center mt-4 mb-4">
+          {photos[currentIndex].date}
         </div>
 
         {/* Caption */}
