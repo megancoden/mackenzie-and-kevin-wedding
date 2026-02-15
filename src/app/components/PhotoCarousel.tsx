@@ -17,61 +17,61 @@ export default function PhotoCarousel() {
     {
       src: '/images/2019-05-13.JPG',
       alt: 'Photo 2',
-      caption: 'A cooking class together',
+      caption: 'Mastering some culinary skills in Chicago',
       date: '05/13/2019'
     },
     {
       src: '/images/2020-07-09.JPG',
       alt: 'Photo 3',
-      caption: 'A trip to montana',
+      caption: 'Mountain biking in Glacier National Park',
       date: '07/09/2020'
     },
     {
       src: '/images/2020-07-15.JPG',
       alt: 'Photo 4',
-      caption: 'Montana adventures',
+      caption: 'Big Sky adventures',
       date: '07/15/2020'
     },
     {
       src: '/images/2021-03-14.JPG',
       alt: 'Photo 5',
-      caption: 'Enjoying new haven pizza on pi day 2021',
+      caption: 'We love New Haven style pizza',
       date: '03/14/2021'
     },
     {
       src: '/images/2021-05-15.JPEG',
       alt: 'Photo 6',
-      caption: 'We love hiking together',
+      caption: 'Enjoying Connecticut\'s natural beauty',
       date: '05/15/2021'
     },
     {
       src: '/images/2021-07-23.JPEG',
       alt: 'Photo 7',
-      caption: 'More views',
+      caption: 'Exploring the Biltmore Estate',
       date: '07/23/2021'
     },
     {
       src: '/images/2022-09-26.JPG',
       alt: 'Photo 8',
-      caption: 'Macchu piccu trip 2022',
+      caption: 'Scenic views on the Inca Trail',
       date: '09/26/2022'
     },
-    {
-      src: '/images/2023-09-19.jpeg',
-      alt: 'Photo 9',
-      caption: 'Enjoying some lobster in Maine ',
-      date: '09/19/2023'
-    },
+    // {
+    //   src: '/images/2023-09-19.jpeg',
+    //   alt: 'Photo 9',
+    //   caption: 'Enjoying some lobster in Maine ',
+    //   date: '09/19/2023'
+    // },
     {
       src: '/images/2024-02-17.JPEG',
       alt: 'Photo 10',
-      caption: 'Hiking with our new dog Roger!',
+      caption: 'Roger\'s first family hike',
       date: '02/17/2024'
     },
     {
       src: '/images/2024-12-21.JPEG',
       alt: 'Photo 11',
-      caption: '12/21/24: Roger bringing me an engagement ring!',
+      caption: 'Kevin enlisted some help from Roger with the proposal',
       date: '12/21/2024'
     },
     {
@@ -80,12 +80,12 @@ export default function PhotoCarousel() {
       caption: 'Celebrating our engagement with Roger',
       date: '12/21/2024'
     },
-    {
-      src: '/images/2025-04-05.JPG',
-      alt: 'Photo 13',
-      caption: 'Adventures',
-      date: '04/05/2025'
-    }, 
+    // {
+    //   src: '/images/2025-04-05.JPG',
+    //   alt: 'Photo 13',
+    //   caption: 'New Haven cherry blossom festival',
+    //   date: '04/05/2025'
+    // }, 
     {
       src: '/images/IMG_0473.JPG',
       alt: 'Photo 14',
@@ -148,7 +148,7 @@ export default function PhotoCarousel() {
 
   return (
     <div className="w-full mx-auto bg-white rounded-lg shadow-md p-6 my-8">
-      <h2 className="header-title mb-4 flex justify-center">Our history</h2>
+      <h2 className="header-title mb-4 flex justify-center">Our History</h2>
       
       <div className="relative">
         <div className="relative h-96 overflow-hidden rounded-lg">
@@ -168,7 +168,7 @@ export default function PhotoCarousel() {
               />
               {/* Date overlay - inside each image container */}
               {index === currentIndex && photo.date && (
-                <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded text-sm z-10">
+                <div className="absolute bottom-0 right-80 bg-black/60 text-white px-3 py-1 rounded text-sm z-10">
                   {photo.date}
                 </div>
               )}
