@@ -61,7 +61,7 @@ export default function Header() {
           {/* Names — centered */}
           <div className="flex-1 flex justify-center items-center h-full">
             <Link href="/" className="block text-center" onClick={() => setIsMenuOpen(false)}>
-              <h1 className="header-title text-xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight hover:!text-[var(--wedding-primary-dark)] transition-colors">
+              <h1 className="main-title text-xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight hover:!text-[var(--wedding-primary-dark)] transition-colors">
                 Mackenzie & Kevin
               </h1>
               <p className="header-subtitle text-xs sm:text-sm md:text-base leading-tight">

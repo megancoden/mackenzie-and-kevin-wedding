@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import Image from 'next/image';
+import SectionHeader from './SectionHeader';
 
 export default function PhotoCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,15 +60,7 @@ export default function PhotoCarousel() {
   return (
     <div className="w-full bg-[#f2f5f3] rounded-2xl shadow-md p-6 sm:p-8 my-8">
 
-      {/* Header */}
-      <div className="text-center mb-6">
-        <h2 className="header-title">Our History</h2>
-        <div className="flex items-center gap-3 mt-3 mx-auto max-w-xs">
-          <div className="flex-1 h-px bg-[var(--wedding-secondary-dark)]/20" />
-          <span className="text-[var(--wedding-secondary-dark)]/30 text-xs">✦</span>
-          <div className="flex-1 h-px bg-[var(--wedding-secondary-dark)]/20" />
-        </div>
-      </div>
+      <SectionHeader label="Our History" />
 
       {/* Image area */}
       <div
