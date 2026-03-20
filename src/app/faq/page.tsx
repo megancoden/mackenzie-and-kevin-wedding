@@ -1,3 +1,5 @@
+import SectionHeader from "../components/SectionHeader";
+
 export default function FAQPage() {
   const faqs = [
     {
@@ -30,19 +32,7 @@ export default function FAQPage() {
     <div className="min-h-screen py-12 px-4 pt-[124px] background">
       <main className="flex flex-col items-center">
         <div className="w-full max-w-md sm:max-w-lg bg-[#f2f5f3] rounded-2xl shadow-md px-8 py-10 mt-6">
-
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="header-title">
-              FAQ
-            </h1>
-            <div className="flex items-center gap-3 mt-4 mx-auto max-w-xs">
-              <div className="flex-1 h-px bg-[var(--wedding-secondary-dark)]/20" />
-              <span className="text-[var(--wedding-secondary-dark)]/30 text-xs">✦</span>
-              <div className="flex-1 h-px bg-[var(--wedding-secondary-dark)]/20" />
-            </div>
-          </div>
-
+          <SectionHeader label="Frequently Asked Questions" />
           {/* Q&A list */}
           <div className="space-y-6">
             {faqs.map((faq, i) => (

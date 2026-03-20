@@ -1,3 +1,4 @@
+import SectionHeader from "../components/SectionHeader";
 
 
 export default function EventInfoPage() {
@@ -6,17 +7,7 @@ export default function EventInfoPage() {
       <main className="flex flex-col items-center">
         <div className="casual-font text-[var(--wedding-secondary-dark)] bg-[#f2f5f3] rounded-2xl shadow-md px-8 py-10 w-full max-w-md sm:max-w-lg mt-6 flex flex-col items-center">
 
-          {/* Title */}
-          <h1 className="header-title text-3xl sm:text-4xl text-center leading-tight mb-2">
-            Wedding Details
-          </h1>
-
-          {/* Ornamental rule */}
-          <div className="flex items-center gap-3 my-4 w-full max-w-xs">
-            <div className="flex-1 h-px bg-[var(--wedding-secondary-dark)]/20" />
-            <span className="text-[var(--wedding-secondary-dark)]/30 text-xs">✦</span>
-            <div className="flex-1 h-px bg-[var(--wedding-secondary-dark)]/20" />
-          </div>
+          <SectionHeader label="Wedding Details" />
 
           {/* Date & Venue */}
           <div className="text-center space-y-1 mb-6">

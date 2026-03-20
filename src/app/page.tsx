@@ -6,9 +6,8 @@ export default function HomePage() {
       <main className="flex flex-col items-center">
         <div className="w-full max-w-md sm:max-w-lg bg-[#f2f5f3] rounded-2xl shadow-md p-8 mt-6 flex flex-col items-center">
 
-          {/* Save the Date eyebrow */}
           <div className="header-title">
-            Save the Date
+            SAVE THE DATE!
           </div>
 
           {/* Photo */}

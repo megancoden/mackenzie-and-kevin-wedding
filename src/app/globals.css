@@ -21,11 +21,18 @@
     --wedding-accent: #f1f5f9;
 }
 
-.header-title {
+.main-title {
   font-family: var(--font-playfair), serif;
   font-size: 2.5rem;
   color: var(--wedding-secondary-dark);
 }
+
+.header-title {
+  font-family: var(--font-playfair), serif;
+  font-size: 2rem;
+  color: var(--wedding-secondary-dark);
+}
+
 
 .header-subtitle {
   font-family: var(--font-lato), sans-serif;
