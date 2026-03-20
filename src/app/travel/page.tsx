@@ -101,7 +101,7 @@ export default function TravelPage() {
             imageSrc="/images/baronette.JPEG"
             imageAlt="Baronette Renaissance"
             address="27790 Novi Road, Novi, MI 48377"
-            description="We have a block of rooms at this hotel, approximately a 15-minute drive from all wedding weekend events. Parking is free and there is a restaurant & bar onsite. The wedding block closes September 24."
+            description="We have a block of rooms at this hotel, which is approximately a 15-minute drive from wedding weekend events. Parking is free, and there is a restaurant/bar onsite. The wedding block closes September 24th."
             link="https://app.marriott.com/reslink?id=1773757010326&key=GRP&app=resvlink"
             linkLabel="Book the group rate →"
             badge="Our Room Block"
@@ -116,7 +116,7 @@ export default function TravelPage() {
             imageSrc="/images/marriott.jpg"
             imageAlt="TownePlace Suites by Marriott"
             address="199 Loop Road, Commerce Twp, MI 48390"
-            description="Free parking and free breakfast included. Approximately a 10-minute drive to all weekend events."
+            description="Offers free parking and free breakfast. Approximately a 10-minute drive to all weekend events."
           />
 
           <HotelCard
@@ -124,7 +124,7 @@ export default function TravelPage() {
             imageSrc="/images/hampton.JPEG"
             imageAlt="Hampton Inn"
             address="169 Loop Road, Commerce Twp, MI 48390"
-            description="Free parking and free breakfast included. Approximately a 10-minute drive to all weekend events."
+            description="Offers free parking and free breakfast. Approximately a 10-minute drive to all weekend events."
           />
 
         </div>
