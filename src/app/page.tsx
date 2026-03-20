@@ -1,55 +1,66 @@
 import Image from "next/image";
-import Link from 'next/link';
+
 export default function HomePage() {
   return (
-    <div className="min-h-screen py-12 px-4 pt-[124px] background">
-      <div className="header-title flex justify-center">
-        Save the Date!
-      </div>
-        <div className="max-w-4xl mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6">
-          <div style={{display: 'flex', justifyContent: "center"}}>
+    <div className="min-h-screen pt-[124px] pb-16 px-4 background">
+      <main className="flex flex-col items-center">
+        <div className="w-full max-w-md sm:max-w-lg bg-[#f2f5f3] rounded-2xl shadow-md p-8 mt-6 flex flex-col items-center">
+
+          {/* Save the Date eyebrow */}
+          <div className="header-title">
+            Save the Date
+          </div>
+
+          {/* Photo */}
+          <div className="relative w-full rounded-xl overflow-hidden shadow-lg my-4">
             <Image
-              src={'/images/IMG_1200.jpg'}
+              src="/images/IMG_1200.jpg"
               alt="Mackenzie and Kevin"
-              className="max-w-full max-h-full object-contain rounded-lg"
               width={500}
               height={600}
-              priority={true}
+              className="w-full h-auto object-cover"
+              priority
             />
+            {/* Date overlay */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent px-6 py-4 text-center">
+              <span className="casual-font text-white text-lg tracking-widest">
+                October 17, 2026
+              </span>
+            </div>
           </div>
-          <div className="casual-font items-center">
-            <main className="flex flex-col items-center">
-              <div className="text-center rsvp-header-text">
-                <div className="header-title">
-                  WEDDING DETAILS
-                </div>
-                <div>
-                  October 17, 2026
-                </div>
-                {/* <div>
-                  6:00 - 11:00 PM
-                </div> */}
-                <div>
-                  Bay Pointe Golf Club
-                </div>
-                <div>
-                  4001 Haggerty Rd, West Bloomfield, MI 48323
-                </div>
-                {/* <div className="mt-4">
-                  Attire: Dressy casual (no ties)
-                </div> */}
-                <div className="mt-4">
-                  Ceremony followed by dinner and dancing
-                </div>
-              </div>
-              {/* <button className="rsvp-button">
-                <Link href="/rsvp">
-                  RSVP NOW
-                </Link>
-              </button> */}
-            </main>
+
+          {/* Details */}
+          <div className="casual-font text-center text-[var(--wedding-secondary-dark)] space-y-3 w-full pt-4">
+            <div className="h-px bg-[var(--wedding-secondary-dark)]/10 mx-4" />
+
+            <div>
+              <p className="header-title tracking-wide">Bay Pointe Golf Club</p>
+              <p className="text-xs italic opacity-60 mt-0.5">
+                4001 Haggerty Rd, West Bloomfield, MI 48323
+              </p>
+            </div>
+            {/* <div>
+              6:00 - 11:00 PM
+            </div> */}
+
+            <div className="h-px bg-[var(--wedding-secondary-dark)]/10 mx-4" />
+
+            {/* <div className="mt-4">
+              Attire: Dressy casual (no ties)
+            </div> */}
+            <p className="text-sm opacity-75 leading-relaxed">
+              Ceremony followed by dinner and dancing
+            </p>
+
+            {/* <div className="pt-2">
+              <button className="rsvp-button">
+                <Link href="/rsvp">RSVP NOW</Link>
+              </button>
+            </div> */}
           </div>
+
         </div>
-      </div>
+      </main>
+    </div>
   );
 }
