@@ -64,11 +64,7 @@ export default function PhotoCarousel() {
         <h2 className="header-title">Our History</h2>
         <div className="flex items-center gap-3 mt-3 mx-auto max-w-xs">
           <div className="flex-1 h-px bg-[var(--wedding-secondary-dark)]/20" />
-          <span className="text-[var(--wedding-secondary-dark)]/30 text-xs">✦          <div className="min-h-screen py-12 px-4 pt-[96px] mt-8 background">
-            <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-              {/* ... */}
-            </div>
-          </div></span>
+          <span className="text-[var(--wedding-secondary-dark)]/30 text-xs">✦</span>
           <div className="flex-1 h-px bg-[var(--wedding-secondary-dark)]/20" />
         </div>
       </div>

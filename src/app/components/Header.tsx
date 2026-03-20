@@ -102,29 +102,31 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Nav links */}
-        <nav className="p-6 space-y-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setIsMenuOpen(false)}
-              className={`block px-4 py-3 rounded-lg casual-font text-lg transition-colors ${
-                pathname === item.href
-                  ? "text-[var(--wedding-primary-dark)] bg-white border-l-4 border-[var(--wedding-primary-dark)]"
-                  : "text-[var(--wedding-secondary-dark)] hover:text-[var(--wedding-primary-dark)] hover:bg-white/70"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        {/* Scrollable nav + pinned footer */}
+        <div className="flex flex-col" style={{ height: 'calc(100% - 7rem)' }}>
+          <nav className="flex-1 overflow-y-auto p-6 space-y-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsMenuOpen(false)}
+                className={`block px-4 py-3 rounded-lg casual-font text-lg transition-colors ${
+                  pathname === item.href
+                    ? "text-[var(--wedding-primary-dark)] bg-white border-l-4 border-[var(--wedding-primary-dark)]"
+                    : "text-[var(--wedding-secondary-dark)] hover:text-[var(--wedding-primary-dark)] hover:bg-white/70"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
-        {/* Footer info */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 text-center">
-          <p className="header-title text-lg text-[var(--wedding-secondary-dark)] mb-1">Save the Date</p>
-          <p className="casual-font text-sm text-[var(--wedding-secondary-dark)]/70">October 17, 2026</p>
-          <p className="casual-font text-xs text-[var(--wedding-secondary-dark)]/50 mt-0.5">West Bloomfield, Michigan</p>
+          {/* Pinned footer */}
+          <div className="flex-shrink-0 p-6 border-t border-gray-200 text-center">
+            <p className="header-title text-lg text-[var(--wedding-secondary-dark)] mb-1">Save the Date</p>
+            <p className="casual-font text-sm text-[var(--wedding-secondary-dark)]/70">October 17, 2026</p>
+            <p className="casual-font text-xs text-[var(--wedding-secondary-dark)]/50 mt-0.5">West Bloomfield, Michigan</p>
+          </div>
         </div>
       </div>
     </>
