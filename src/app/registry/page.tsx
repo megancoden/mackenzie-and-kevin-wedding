@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import Script from 'next/script';
 import SectionHeader from '../components/SectionHeader';
 
 const VENMO_HANDLE = '@mackenziecoden';
@@ -8,18 +9,6 @@ const VENMO_HANDLE = '@mackenziecoden';
 export default function RegistryPage() {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
-  const zolaRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!zolaRef.current) return;
-    const script = document.createElement('script');
-    script.id = 'zola-wjs';
-    script.async = true;
-    script.src = 'https://widget.zola.com/js/widget.js';
-    if (!document.getElementById('zola-wjs')) {
-      zolaRef.current.appendChild(script);
-    }
-  }, []);
 
   const venmoUrl = () => {
     const handle = VENMO_HANDLE.replace('@', '');
@@ -35,7 +24,11 @@ export default function RegistryPage() {
           <SectionHeader label="Registry" />
 
           {/* Zola Registry — grows with content, no fixed height */}
-          <div ref={zolaRef} className="w-full">
+          <div className="w-full">
+            <Script
+              src="https://widget.zola.com/js/widget.js"
+              strategy="lazyOnload"
+            />
             <a
               className="zola-registry-embed"
               href="https://www.zola.com/wedding/mackenzieandkevinoctober17"
