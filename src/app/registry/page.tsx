@@ -1,14 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SectionHeader from '../components/SectionHeader';
 
-// TODO: Fill in your actual Venmo handle
 const VENMO_HANDLE = '@mackenziecoden';
 
 export default function RegistryPage() {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
+  const zolaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!zolaRef.current) return;
+    const script = document.createElement('script');
+    script.id = 'zola-wjs';
+    script.async = true;
+    script.src = 'https://widget.zola.com/js/widget.js';
+    if (!document.getElementById('zola-wjs')) {
+      zolaRef.current.appendChild(script);
+    }
+  }, []);
 
   const venmoUrl = () => {
     const handle = VENMO_HANDLE.replace('@', '');
@@ -20,35 +31,38 @@ export default function RegistryPage() {
   return (
     <div className="min-h-screen py-12 px-4 pt-[124px] background">
       <main className="flex flex-col items-center">
-        <div className="casual-font text-[var(--wedding-secondary-dark)] bg-[#f2f5f3] rounded-2xl shadow-md px-8 py-10 mt-6 w-full max-w-md sm:max-w-lg">
+        <div className="casual-font text-[var(--wedding-secondary-dark)] bg-[#f2f5f3] rounded-2xl shadow-md px-8 py-10 mt-6 w-full max-w-5xl">
           <SectionHeader label="Registry" />
 
-          {/* Intro */}
-          <div className="text-center mb-8 space-y-2">
-            <h2 className="header-title text-2xl">A Gift of Experience</h2>
-            <p className="text-sm text-[var(--wedding-secondary-dark)]/70 leading-relaxed max-w-sm mx-auto">
-              Your presence at our wedding is the greatest gift of all. If you'd like to contribute, we'd love help building our life together — whether that's a honeymoon adventure, a home upgrade, or a special memory.
+          {/* Zola Registry — grows with content, no fixed height */}
+          <div ref={zolaRef} className="w-full">
+            <a
+              className="zola-registry-embed"
+              href="https://www.zola.com/wedding/mackenzieandkevinoctober17"
+              data-registry-key="mackenzieandkevinoctober17"
+            >
+              Loading our Zola Wedding Registry...
+            </a>
+            <p className="text-center text-xs text-[var(--wedding-secondary-dark)]/40 mt-3">
+              Having trouble?{' '}
+              <a
+                href="https://www.zola.com/registry/mackenzieandkevinoctober17"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-[var(--wedding-primary-dark)] transition-colors"
+              >
+                Open registry in a new tab
+              </a>
             </p>
           </div>
 
-          <div className="h-px bg-[var(--wedding-secondary-dark)]/10 mb-8" />
+          {/* Honeymoon / Venmo card */}
+          <div className="bg-white/60 rounded-xl border border-[var(--wedding-secondary-dark)]/10 p-5 mt-8 max-w-md mx-auto">
+            <p className="casual-font text-sm font-semibold text-[var(--wedding-secondary-dark)] mb-4">
+              Contribute to our honeymoon fund!
+            </p>
 
-          {/* Venmo card */}
-          <div className="bg-white/60 rounded-xl border border-[var(--wedding-secondary-dark)]/10 p-5 mb-4">
-            {/* Header */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center text-white flex-shrink-0 bg-[#3D95CE]">
-                <svg viewBox="0 0 24 24" className="w-7 h-7 fill-current" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M19.5 2c.6 1 .9 2.1.9 3.5 0 4.4-3.7 10.1-6.7 14.1H7.4L4.5 2.9l5.9-.6 1.5 12c1.4-2.3 3.1-5.9 3.1-8.4 0-1.4-.2-2.3-.6-3.1L19.5 2z"/>
-                </svg>
-              </div>
-              <div>
-                <p className="header-title text-base leading-none">Venmo</p>
-                <p className="text-xs text-[var(--wedding-secondary-dark)]/50 mt-0.5">{VENMO_HANDLE}</p>
-              </div>
-            </div>
-
-            {/* Custom amount input */}
+            {/* Amount input */}
             <div className="flex items-center bg-[#f2f5f3] rounded-lg px-4 py-2.5 mb-3">
               <span className="text-[var(--wedding-secondary-dark)]/50 mr-1 text-sm">$</span>
               <input
@@ -92,7 +106,7 @@ export default function RegistryPage() {
               )}
             </div>
 
-            {/* Open in Venmo */}
+            {/* Venmo button */}
             <a
               href={venmoUrl()}
               target="_blank"
@@ -105,9 +119,6 @@ export default function RegistryPage() {
             </a>
           </div>
 
-          <p className="text-center text-xs italic text-[var(--wedding-secondary-dark)]/40 mt-6">
-            No gift is ever expected — we're just grateful you'll be there.
-          </p>
         </div>
       </main>
     </div>
