@@ -44,6 +44,16 @@
   padding-right: 2rem;
 }
 
+.general-subtitle {
+  font-family: var(--font-lato), sans-serif;
+  font-size: text-sm;
+  color: var(--wedding-secondary);
+  margin-top: 0.25rem;
+  text-align: left;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 .text-wedding-primary-dark {
   color: var(--wedding-primary-dark) !important;
 }

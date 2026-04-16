@@ -38,7 +38,7 @@ export default function RootLayout({
         <main className="min-h-screen">
           {children}
         </main>
-        <footer className="bg-gray-50 border-t border-gray-200 py-8 mt-12">
+        <footer className="bg-[#f2f5f3] border-t border-gray-200 py-8 mt-12">
           <div className="max-w-6xl mx-auto px-4 text-center text-wedding-secondary-dark casual-font">
             <p>&copy; 2026 Mackenzie & Kevin. Made with love by{' '}
               <Link href="https://github.com/megancoden" className="underline hover:text-[var(--wedding-primary-dark)]">Megan Coden</Link>.</p>
