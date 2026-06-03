@@ -2,7 +2,8 @@
 
 import { FormStep, InvitationWithGuests, Guest, Response } from '@/types'
 import Link from 'next/link'
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 interface InvitationNotes {
   dietaryRestrictions: string
@@ -24,28 +25,26 @@ export default function RSVPPage() {
     dietaryRestrictions: '',
     notes: ''
   })
+  const [firstNameSearch, setFirstNameSearch] = useState<string>('')
+  const [lastNameSearch, setLastNameSearch] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
+  const [submittedInvitation, setSubmittedInvitation] = useState<InvitationWithGuests | null>(null)
+  const searchParams = useSearchParams()
 
-  const handleLookup = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const lookupGuestByName = async (firstName: string, lastName: string) => {
     setLoading(true)
     setError('')
-    
-    const formData = new FormData(e.currentTarget)
-    const firstName = formData.get('firstName') as string
-    const lastName = formData.get('lastName') as string
-    
+
     try {
       const response = await fetch(`/api/rsvp?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}`)
       const data = await response.json()
-      
+
       if (response.ok) {
         setInvitation(data.invitation)
         setSearchedGuest(data.searchedGuest)
         setStep('form')
-        
-        // Initialize form data with existing responses
+
         const responses: GuestResponsesState = {}
         data.invitation.guests.forEach((guest: Guest) => {
           responses[guest.id] = {
@@ -55,8 +54,7 @@ export default function RSVPPage() {
           }
         })
         setGuestResponses(responses)
-        
-        // Initialize invitation notes
+
         setInvitationNotes({
           dietaryRestrictions: data.invitation.dietaryRestrictions || '',
           notes: data.invitation.notes || ''
@@ -70,6 +68,25 @@ export default function RSVPPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  useEffect(() => {
+    const firstName = searchParams.get('firstName')?.trim() || ''
+    const lastName = searchParams.get('lastName')?.trim() || ''
+
+    if (firstName || lastName) {
+      setFirstNameSearch(firstName)
+      setLastNameSearch(lastName)
+    }
+
+    if (firstName && lastName && step === 'lookup' && !invitation && !loading) {
+      lookupGuestByName(firstName, lastName)
+    }
+  }, [searchParams, step, invitation, loading])
+
+  const handleLookup = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    await lookupGuestByName(firstNameSearch, lastNameSearch)
   }
 
   const handleRSVPSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -121,16 +138,11 @@ export default function RSVPPage() {
         body: JSON.stringify(requestData)
       })
       
+      const data = await response.json()
       if (response.ok) {
-        alert('RSVP submitted successfully!')
-        // Reset form
-        setStep('lookup')
-        setInvitation(null)
-        setSearchedGuest(null)
-        setGuestResponses({})
-        setInvitationNotes({ dietaryRestrictions: '', notes: '' })
+        // Show confirmation card with returned invitation data
+        setSubmittedInvitation(data.invitation || invitation)
       } else {
-        const data = await response.json()
         setError(data.error || 'Failed to submit RSVP')
       }
     } catch (error) {
@@ -175,6 +187,8 @@ export default function RSVPPage() {
                 id="firstName"
                 name="firstName"
                 required
+                value={firstNameSearch}
+                onChange={(e) => setFirstNameSearch(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 rsvp-body-text"
                 placeholder="Enter any first name on your invitation"
               />
@@ -189,6 +203,8 @@ export default function RSVPPage() {
                 id="lastName"
                 name="lastName"
                 required
+                value={lastNameSearch}
+                onChange={(e) => setLastNameSearch(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 rsvp-body-text"
                 placeholder="Enter the corresponding last name"
               />
@@ -221,6 +237,67 @@ export default function RSVPPage() {
           <p className="text-center">Loading...</p>
         </div>
       </div>
+    )
+  }
+
+  if (submittedInvitation) {
+    const email = searchedGuest?.email || 'No email on file'
+    const returnGuest = searchedGuest || submittedInvitation.guests[0]
+    const returnLink = `/rsvp?firstName=${encodeURIComponent(returnGuest?.firstName || '')}&lastName=${encodeURIComponent(returnGuest?.lastName || '')}`
+
+    return (
+      <>
+        <Link href="/" legacyBehavior>
+          <a className="underline underline-offset-4 hover:text-gray-700">Return to home page</a>
+        </Link>
+
+        <div className="min-h-screen py-12 px-4 pt-[96px] background">
+          <div className="max-w-3xl mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6 casual-font">
+            <h2 className="text-2xl font-bold fancy-font text-wedding-secondary-dark mb-4">RSVP submitted successfully</h2>
+
+            <p className="mb-4">A confirmation was sent to: <strong>{email}</strong></p>
+
+            <div className="mb-6">
+              <h3 className="font-semibold mb-2">Summary</h3>
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr>
+                    <th className="pb-2">Guest</th>
+                    {submittedInvitation.invitedToFriday && <th className="pb-2">Friday</th>}
+                    {submittedInvitation.invitedToSaturday && <th className="pb-2">Saturday</th>}
+                    {submittedInvitation.invitedToSunday && <th className="pb-2">Sunday</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {submittedInvitation.guests.map(g => (
+                    <tr key={g.id} className="border-t">
+                      <td className="py-2">{g.firstName} {g.lastName}</td>
+                      {submittedInvitation.invitedToFriday && <td className="py-2">{g.fridayResponse ?? 'No response'}</td>}
+                      {submittedInvitation.invitedToSaturday && <td className="py-2">{g.saturdayResponse ?? 'No response'}</td>}
+                      {submittedInvitation.invitedToSunday && <td className="py-2">{g.sundayResponse ?? 'No response'}</td>}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="mt-4">
+                <p><strong>Dietary restrictions:</strong> {submittedInvitation.dietaryRestrictions || 'None provided'}</p>
+                <p><strong>Notes:</strong> {submittedInvitation.notes || 'None provided'}</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <Link href={returnLink} legacyBehavior>
+                <a className="py-3 px-6 rsvp-button inline-block text-center">Modify RSVP</a>
+              </Link>
+              <div>P.S. Mackenzie&apos;s sister Megan is turning 25 on October 16th!</div>
+              <Link href="/happy-birthday-megan" legacyBehavior>
+                <a className="underline hover:text-gray-700">Check out Megan's Birthday Page</a>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </>
     )
   }
 
