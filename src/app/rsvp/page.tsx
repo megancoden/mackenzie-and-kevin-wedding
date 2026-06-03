@@ -169,7 +169,7 @@ export default function RSVPPage() {
 
   if (step === 'lookup') {
     return (
-      <div className="min-h-screen py-12 px-4 background pt-[124px]">
+      <div className="min-h-screen py-12 px-4 background pt-[148px]">
         <div className="max-w-md mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6 ">
           <h1 className="text-wedding-secondary-dark text-2xl font-bold text-center mb-6">RSVP</h1>
           
@@ -232,7 +232,7 @@ export default function RSVPPage() {
   // Ensure we have data before rendering the form
   if (!invitation || !searchedGuest) {
     return (
-      <div className="min-h-screen py-12 px-4 pt-[96px] background">
+      <div className="min-h-screen py-12 px-4 pt-[124px] background">
         <div className="max-w-md mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6 casual-font">
           <p className="text-center">Loading...</p>
         </div>
@@ -251,7 +251,7 @@ export default function RSVPPage() {
           <a className="underline underline-offset-4 hover:text-gray-700">Return to home page</a>
         </Link>
 
-        <div className="min-h-screen py-12 px-4 pt-[96px] background">
+        <div className="min-h-screen py-12 px-4 pt-[124px] background">
           <div className="max-w-3xl mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6 casual-font">
             <h2 className="text-2xl font-bold fancy-font text-wedding-secondary-dark mb-4">RSVP submitted successfully</h2>
 
@@ -304,7 +304,7 @@ export default function RSVPPage() {
   return (
                       <><Link href="/" legacyBehavior>
       <a className="underline underline-offset-4 hover:text-gray-700">Return to home page</a>
-    </Link><div className="min-h-screen py-12 px-4 pt-[96px] background">
+    </Link><div className="min-h-screen py-12 px-4 pt-[124px] background">
         <div className="max-w-4xl mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6">
           <div className="mb-6 text-center">
             <h1 className="text-2xl font-bold fancy-font text-wedding-secondary-dark mb-2">RSVP for Your Party</h1>
