@@ -3,7 +3,6 @@
 import { FormStep, InvitationWithGuests, Guest, Response } from '@/types'
 import Link from 'next/link'
 import { useState, useEffect, FormEvent } from 'react'
-import { useSearchParams } from 'next/navigation'
 
 interface InvitationNotes {
   dietaryRestrictions: string
@@ -30,7 +29,6 @@ export default function RSVPPage() {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [submittedInvitation, setSubmittedInvitation] = useState<InvitationWithGuests | null>(null)
-  const searchParams = useSearchParams()
 
   const lookupGuestByName = async (firstName: string, lastName: string) => {
     setLoading(true)
@@ -71,8 +69,9 @@ export default function RSVPPage() {
   }
 
   useEffect(() => {
-    const firstName = searchParams.get('firstName')?.trim() || ''
-    const lastName = searchParams.get('lastName')?.trim() || ''
+    const params = new URLSearchParams(window.location.search)
+    const firstName = params.get('firstName')?.trim() || ''
+    const lastName = params.get('lastName')?.trim() || ''
 
     if (firstName || lastName) {
       setFirstNameSearch(firstName)
@@ -82,7 +81,7 @@ export default function RSVPPage() {
     if (firstName && lastName && step === 'lookup' && !invitation && !loading) {
       lookupGuestByName(firstName, lastName)
     }
-  }, [searchParams, step, invitation, loading])
+  }, [step, invitation, loading])
 
   const handleLookup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
