@@ -1,14 +1,26 @@
 'use client';
 
-import { useState } from 'react';
-import Script from 'next/script';
+import { useState, useEffect } from 'react';
 import SectionHeader from '../components/SectionHeader';
+import Script from 'next/script';
 
 const VENMO_HANDLE = '@mackenziecoden';
 
 export default function RegistryPage() {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
+
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://widget.zola.com/js/widget.js'
+    script.async = true
+    script.setAttribute('data-zola-widget', 'true')
+    document.body.appendChild(script)
+
+    return () => {
+      script.remove()
+    }
+  }, [])
 
   const venmoUrl = () => {
     const handle = VENMO_HANDLE.replace('@', '');
