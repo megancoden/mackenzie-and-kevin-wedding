@@ -462,9 +462,6 @@ export default function RegistryPage() {
           {/* Amazon wishlist card */}
           <div className="qlc-card">
             <p className="qlc-card-title">✦ amazon wishlist picks</p>
-            <p className="crisis-note-text" style={{ marginBottom: '1.25rem' }}>
-              Please send any gifts to 6655 Carlyle Ct, West Bloomfield, MI 48322.
-            </p>
             <div className="amazon-items">
               {AMAZON_ITEMS.map((item) => (
                 <div key={item.name} className="amz-card">
@@ -524,7 +521,7 @@ export default function RegistryPage() {
               )}
               </>
           )}
-            <div className="crisis-note-text" style={{ marginBottom: '1.25rem', marginTop: '1.25rem' }}>
+            <div className="qlc-card-title" style={{ marginBottom: '1.25rem', marginTop: '1.25rem' }}>
               Please send any gift cards to mlcoden@umich.edu.
             </div>
             <a href={selectedGC.url} target="_blank" rel="noopener noreferrer" className="gc-link-btn">
