@@ -156,3 +156,30 @@ body {
   color: var(--wedding-secondary-dark);
   margin-top: 8;
 }
+
+/* Birthday page — override the wedding header theme */
+body.birthday-page header {
+  background-color: #1a1a1a !important;
+  border-bottom-color: #333 !important;
+}
+
+/* Header text: names, date */
+body.birthday-page header h1,
+body.birthday-page header p {
+  color: #f5f0e8 !important;
+}
+
+/* Menu button icon + label */
+body.birthday-page header button {
+  color: #e8a0a0 !important;
+}
+
+body.birthday-page header button:hover {
+  color: #f5f0e8 !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Drawer background */
+body.birthday-page .drawer {
+  background-color: #1a1a1a !important;
+}

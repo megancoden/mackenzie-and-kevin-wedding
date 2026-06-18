@@ -45,7 +45,7 @@ async function main() {
         {
           firstName: 'Sarah',
           lastName: 'Doe',
-          email: 'sarah.doe@example.com',
+          email: 'megancoden@gmail.com',
           guestType: 'NAMED_GUEST'
         },
         {
@@ -67,13 +67,13 @@ async function main() {
         {
           firstName: 'Michael',
           lastName: 'Johnson',
-          email: 'michael.johnson@example.com',
+          email: 'megancoden@gmail.com',
           guestType: 'NAMED_GUEST'
         },
         {
           firstName: 'Lisa',
           lastName: 'Johnson',
-          email: 'lisa.johnson@example.com',
+          email: 'mlcoden@umich.edu',
           guestType: 'NAMED_GUEST'
         }
       ]
@@ -90,7 +90,7 @@ async function main() {
         {
           firstName: 'Emily',
           lastName: 'Wilson',
-          email: 'emily.wilson@example.com',
+          email: 'megancoden@gmail.com',
           phone: '555-0456',
           guestType: 'NAMED_GUEST'
         }
