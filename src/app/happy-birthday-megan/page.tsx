@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from 'next/image';
-import { Icon } from "lucide-react";
 
 const VENMO_HANDLE = "megan-coden";
 
@@ -25,12 +24,12 @@ const VENMO_FUNDS = [
 ];
 
 const AMAZON_ITEMS = [
-  { icon: "🏐", name: "Volleyball Net",     price: "$60",      url: "https://www.amazon.com/dp/B0FF4BPZCN?ref_=generic_registry_guest_view_modal&colid=69CMKBZJYPCM&coliid=I3449213E6BAGA&th=1&psc=1" },
-  { icon: "🖼️", name: "Picture Frames",   price: "$25",  url: "https://www.amazon.com/dp/B0CS3RYTFQ?ref_=generic_registry_guest_view_modal&colid=69CMKBZJYPCM&coliid=IZXOJVAYS5DXE&th=1&psc=1" },
-  { icon: "😁", name: "Electric Toothbrush",  price: "$50",  url: "https://www.amazon.com/Oral-B-Black-Pro-1000-Rechargeable/dp/B01AKGRTUM/ref=sr_1_7?crid=1R6XGO60R02VA&dib=eyJ2IjoiMSJ9.fs-DrQ1RWZ02dCHIsezinl-bDZKIlXaWO33yB9kyscP1zVKomJM8gI6HPgj7FJcuxJIWqLNayT70dL7VBo8uM1hFykrGcjV4qxQcI5bw2QyX5komgadvnAb5OvVnG9JrAcEXD77jx6lY3Zsrt-pJYdeF4eaovkxgIx8nuM7nXsgbgebMNv48XaMMek2KMvMGFLXBlgbmzV55VWQHrIopvVyWRQ0OfqxHNSCpl1mSpxL78uWymSNAkGzj_knNZv4e_ZXS6zK2jie3cmL1-tHH7KufFlqGJAPjCEgrFUGNhIQ.yrLGVwOPFt7QaSPTawDIwZXONGiOfYEUz6UQy4uR7wU&dib_tag=se&keywords=electric+toothbrush&qid=1778534532&s=gift-cards&sprefix=e%2Cgift-cards%2C3109&sr=1-7" },
-  { icon: "✈️", name: "Travel Pillow",              price: "$65",      url: "https://www.amazon.com/dp/B00LB7REBE?ref_=generic_registry_guest_view_modal&colid=69CMKBZJYPCM&coliid=I2CI01Y7JMR63I&th=1&psc=1" },
-  { icon: "🎧", name: "Noise-Canceling Headphones",  price: "$64",     url: "https://www.amazon.com/JBL-Vibe-Beam-Cancelling-Technology/dp/B0DN45YMP6/ref=sr_1_3?crid=V72JW2B7GD1C&dib=eyJ2IjoiMSJ9.zNb90FsFR6lOElRAZ4EghHHy7Wvls_p15lSWHvy0ZMTgMqKLjVFIirMexTIiV7-ldTSjftfAVkWxa8ZoGcsDCVpAq0uYAMXl7W-sqwQ0lu--LZImeioeJkMaLgRWokXZ_r7RXOaVEU0-tsh-hTtQ8hegLcTBeI3T4Tp9tJ6jE7Nd-U6S0C8VrWaiHa1OTPt9SVrShgq4z6hENxL0Gjew2q1vVD7SauBFmEsR6j31RvU.0nc0SOqBksoEqcOZ_0tJC-gweYiFPKr6ZsbsvZs1Zvo&dib_tag=se&keywords=noise%2Bcancelling%2Bearbuds&qid=1778534822&s=gift-cards&sprefix=noise%2Bcancelling%2Bearbud%2Cgift-cards%2C135&sr=1-3&th=1" },
-  { icon: "🥤", name: "Blender",          price: "$28",      url: "https://www.amazon.com/Consciot-CB08-11-Piece-Personal-Smoothies/dp/B0DDC6DNFF/ref=sr_1_14?crid=1KO3QAVSSMHW0&dib=eyJ2IjoiMSJ9.-W0tuX-e7fwlSjbtjZon0omYNxUQVWj2qf3h0PjWkZTi09Khlh1b8HwoaPikTjC3XTAdlVzXiC996577EozcA8ASEoLvSFAGvSG7d-69ImkNwA-I_-J5MlHMZooCrrgk3Vc2oxoMoVRNbEDNXEvbo8LSDrNGco7ByR-3ws46FaPze8mo6W1_UYkMM9NRYgy5jBtWz3506KbOmScKpZqovcaiqw8jxi19hEHSNs91tTE.9JFL_CEblpZiePyXRsYusLz-pAzanGSQAWIUylWo98M&dib_tag=se&keywords=blender+set&qid=1778534640&s=gift-cards&sprefix=blender+set%2Cgift-cards%2C137&sr=1-14" },
+  { icon: "🏐", name: "Volleyball Net", price: "$60", url: AMAZON_URL },
+  { icon: "🖼️", name: "Picture Frames", price: "$25", url: AMAZON_URL },
+  { icon: "😁", name: "Electric Toothbrush",  price: "$50", url: AMAZON_URL },
+  { icon: "✈️", name: "Travel Pillow", price: "$65", url: AMAZON_URL },
+  { icon: "🎧", name: "Noise-Canceling Headphones",  price: "$64", url: AMAZON_URL},
+  { icon: "🥤", name: "Blender",   price: "$28", url: AMAZON_URL },
 ];
 
 const PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "Custom"];
@@ -93,6 +92,26 @@ export default function RegistryPage() {
           display: flex;
           justify-content: center;
           align-items: center;
+          gap: 1rem;
+        }
+        .side-by-side img {
+          width: 80px !important;
+          height: 80px !important;
+          border-radius: 12px;
+          object-fit: cover;
+          flex-shrink: 0;
+        }
+        @media (min-width: 480px) {
+          .side-by-side img {
+            width: 120px !important;
+            height: 120px !important;
+          }
+        }
+        @media (min-width: 640px) {
+          .side-by-side img {
+            width: 175px !important;
+            height: 175px !important;
+          }
         }
 
         /* ── Centered content column ── */
@@ -172,8 +191,8 @@ export default function RegistryPage() {
           margin: 0 0 0.5rem;
           position: relative;
           z-index: 1;
-          padding-left: 48px;
-          padding-right: 48px;
+          padding-left: 12px;
+          padding-right: 12px;
         }
         .qlc-title em { color: #dc94aa; font-style: italic; }
         .qlc-subtitle {
@@ -522,7 +541,7 @@ export default function RegistryPage() {
               </>
           )}
             <div className="qlc-card-title" style={{ marginBottom: '1.25rem', marginTop: '1.25rem' }}>
-              Please send any gift cards to mlcoden@umich.edu.
+              Please send any gift cards to mlcoden@umich.edu
             </div>
             <a href={selectedGC.url} target="_blank" rel="noopener noreferrer" className="gc-link-btn">
               Buy {selectedGC.name} Gift Card{selectedGC.name === "Amazon" && gcAmount && Number(gcAmount) > 0 ? ` · $${gcAmount}` : ""} →
