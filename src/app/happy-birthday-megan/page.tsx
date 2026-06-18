@@ -541,7 +541,7 @@ export default function RegistryPage() {
               </>
           )}
             <div className="qlc-card-title" style={{ marginBottom: '1.25rem', marginTop: '1.25rem' }}>
-              Please send any gift cards to mlcoden@umich.edu.
+              Please send any gift cards to mlcoden@umich.edu
             </div>
             <a href={selectedGC.url} target="_blank" rel="noopener noreferrer" className="gc-link-btn">
               Buy {selectedGC.name} Gift Card{selectedGC.name === "Amazon" && gcAmount && Number(gcAmount) > 0 ? ` · $${gcAmount}` : ""} →
