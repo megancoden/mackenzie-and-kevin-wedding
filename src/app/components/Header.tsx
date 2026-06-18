@@ -17,6 +17,7 @@ export default function Header() {
     { href: "/photos", label: "Photos" },
     { href: "/travel", label: "Travel" },
     { href: "/faq", label: "FAQ" },
+    { href: "/happy-birthday-megan", label: "Megan's Birthday Registry" }
   ];
 
   // Prevent background scroll when drawer is open
