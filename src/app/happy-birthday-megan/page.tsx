@@ -191,8 +191,8 @@ export default function RegistryPage() {
           margin: 0 0 0.5rem;
           position: relative;
           z-index: 1;
-          padding-left: 48px;
-          padding-right: 48px;
+          padding-left: 12px;
+          padding-right: 12px;
         }
         .qlc-title em { color: #dc94aa; font-style: italic; }
         .qlc-subtitle {
