@@ -1,5 +1,5 @@
 // Prisma generates these automatically, but you can extend them here
-import { Invitation, Guest, GuestType, RsvpStatus, Response } from '@prisma/client'
+import { Invitation, Guest, GuestType, RsvpStatus, Response, MealPreference } from '@prisma/client'
 
 // Full invitation with guests included
 export interface InvitationWithGuests extends Invitation {
@@ -17,8 +17,9 @@ export interface GuestLookupResponse {
 export interface GuestResponseData {
   guestId: string
   fridayResponse?: Response
-  saturdayResponse?: Response  
+  saturdayResponse?: Response
   sundayResponse?: Response
+  dinnerRequest?: MealPreference | null
   plusOneFirstName?: string
   plusOneLastName?: string
 }
@@ -65,4 +66,4 @@ export interface ExcelSummaryRow {
 }
 
 // Re-export Prisma types for convenience
-export type { Invitation, Guest, GuestType, RsvpStatus, Response }
+export type { Invitation, Guest, GuestType, RsvpStatus, Response, MealPreference }

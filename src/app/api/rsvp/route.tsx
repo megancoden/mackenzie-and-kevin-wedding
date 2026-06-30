@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import type { MealPreference } from '@prisma/client'
 import { prisma } from '@/lib/db'
 import { sendRsvpConfirmationEmail } from '@/lib/email'
 
@@ -62,6 +63,7 @@ export async function POST(request: Request) {
         fridayResponse?: string | null
         saturdayResponse?: string | null
         sundayResponse?: string | null
+        dinnerRequest?: MealPreference | null
         plusOneFirstName?: string | null
         plusOneLastName?: string | null
       }>
@@ -75,10 +77,11 @@ export async function POST(request: Request) {
     const result = await prisma.$transaction(async (tx) => {
       // Update each guest's responses
       for (const response of guestResponses) {
-        const updateData: any = {
+        const updateData: Record<string, unknown> = {
           fridayResponse: response.fridayResponse ?? null,
           saturdayResponse: response.saturdayResponse ?? null,
           sundayResponse: response.sundayResponse ?? null,
+          dinnerRequest: response.dinnerRequest ?? null,
           updatedAt: new Date()
         }
 
@@ -95,20 +98,29 @@ export async function POST(request: Request) {
         })
       }
       
-      // Update the invitation status and notes
-      const updatedInvitation = await tx.invitation.update({
+      await tx.guest.updateMany({
+        where: { invitationId },
+        data: {
+          dietaryRestrictions: dietaryRestrictions?.trim() || null,
+          notes: notes?.trim() || null
+        }
+      })
+
+      await tx.invitation.update({
         where: { id: invitationId },
         data: {
           rsvpStatus: 'COMPLETED',
           rsvpSubmittedAt: new Date(),
-          dietaryRestrictions: dietaryRestrictions || null,
-          notes: notes || null,
           updatedAt: new Date()
-        } as any,
+        }
+      })
+
+      const updatedInvitation = await tx.invitation.findUniqueOrThrow({
+        where: { id: invitationId },
         include: {
           guests: true
         }
-      }) as any
+      })
       
       return updatedInvitation
     })

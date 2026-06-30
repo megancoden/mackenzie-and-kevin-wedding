@@ -1,6 +1,7 @@
 'use client'
 
 import { FormStep, InvitationWithGuests, Guest, Response } from '@/types'
+import type { MealPreference } from '@prisma/client'
 import Link from 'next/link'
 import { useState, useEffect, FormEvent } from 'react'
 
@@ -13,9 +14,17 @@ type GuestResponsesState = Record<string, {
   fridayResponse?: Response
   saturdayResponse?: Response
   sundayResponse?: Response
+  dinnerRequest?: MealPreference | null
   plusOneFirstName?: string
   plusOneLastName?: string
 }>
+
+function formatMealChoice(meal?: MealPreference | null) {
+  if (meal === 'CHICKEN') return 'Chicken'
+  if (meal === 'SALMON') return 'Salmon'
+  if (meal === 'VEGETARIAN') return 'Vegetarian'
+  return 'Not selected'
+}
 
 export default function RSVPPage() {
   const [step, setStep] = useState<FormStep>('lookup')
@@ -50,14 +59,15 @@ export default function RSVPPage() {
           responses[guest.id] = {
             fridayResponse: guest.fridayResponse || undefined,
             saturdayResponse: guest.saturdayResponse || undefined,
-            sundayResponse: guest.sundayResponse || undefined
+            sundayResponse: guest.sundayResponse || undefined,
+            dinnerRequest: guest.dinnerRequest || undefined
           }
         })
         setGuestResponses(responses)
 
         setInvitationNotes({
-          dietaryRestrictions: data.invitation.dietaryRestrictions || '',
-          notes: data.invitation.notes || ''
+          dietaryRestrictions: data.invitation.guests[0]?.dietaryRestrictions || '',
+          notes: data.invitation.guests[0]?.notes || ''
         })
       } else {
         setError(data.error || 'Guest not found')
@@ -114,9 +124,20 @@ export default function RSVPPage() {
       const response = guestResponses[guestId]?.[`${event}Response` as keyof typeof guestResponses[string]]
       return !response
     })
+
+    const missingMealSelections = invitation.guests.some(guest => {
+      if (!invitation.invitedToSaturday) return false
+      return guestResponses[guest.id]?.saturdayResponse === 'YES' && !guestResponses[guest.id]?.dinnerRequest
+    })
     
     if (missingResponses) {
       setError('Please provide a response for all guests and all events.')
+      setLoading(false)
+      return
+    }
+
+    if (missingMealSelections) {
+      setError('Please select a Saturday meal choice for each guest attending Saturday.')
       setLoading(false)
       return
     }
@@ -129,6 +150,7 @@ export default function RSVPPage() {
           fridayResponse: responses.fridayResponse,
           saturdayResponse: responses.saturdayResponse,
           sundayResponse: responses.sundayResponse,
+          dinnerRequest: responses.dinnerRequest ?? null,
           plusOneFirstName: responses.plusOneFirstName?.trim() || undefined,
           plusOneLastName: responses.plusOneLastName?.trim() || undefined
         })),
@@ -162,6 +184,16 @@ export default function RSVPPage() {
       [guestId]: {
         ...prev[guestId],
         [`${event}Response`]: response as Response
+      }
+    }))
+  }
+
+  const updateGuestMealChoice = (guestId: string, value: string) => {
+    setGuestResponses(prev => ({
+      ...prev,
+      [guestId]: {
+        ...prev[guestId],
+        dinnerRequest: value as MealPreference
       }
     }))
   }
@@ -289,6 +321,7 @@ export default function RSVPPage() {
                     {submittedInvitation.invitedToFriday && <th className="pb-2">Friday</th>}
                     {submittedInvitation.invitedToSaturday && <th className="pb-2">Saturday</th>}
                     {submittedInvitation.invitedToSunday && <th className="pb-2">Sunday</th>}
+                    {submittedInvitation.invitedToSaturday && <th className="pb-2">Saturday Meal</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -298,14 +331,15 @@ export default function RSVPPage() {
                       {submittedInvitation.invitedToFriday && <td className="py-2">{g.fridayResponse ?? 'No response'}</td>}
                       {submittedInvitation.invitedToSaturday && <td className="py-2">{g.saturdayResponse ?? 'No response'}</td>}
                       {submittedInvitation.invitedToSunday && <td className="py-2">{g.sundayResponse ?? 'No response'}</td>}
+                      {submittedInvitation.invitedToSaturday && <td className="py-2">{formatMealChoice(g.dinnerRequest)}</td>}
                     </tr>
                   ))}
                 </tbody>
               </table>
 
               <div className="mt-4">
-                <p><strong>Dietary restrictions:</strong> {submittedInvitation.dietaryRestrictions || 'None provided'}</p>
-                <p><strong>Notes:</strong> {submittedInvitation.notes || 'None provided'}</p>
+                <p><strong>Dietary restrictions:</strong> {submittedInvitation.guests[0]?.dietaryRestrictions || 'None provided'}</p>
+                <p><strong>Notes:</strong> {submittedInvitation.guests[0]?.notes || 'None provided'}</p>
               </div>
             </div>
 
@@ -315,7 +349,7 @@ export default function RSVPPage() {
               </Link>
               <div>P.S. Mackenzie&apos;s sister Megan is turning 25 on October 16th!</div>
               <Link href="/happy-birthday-megan" legacyBehavior>
-                <a className="underline hover:text-gray-700">Check out Megan's Birthday Page</a>
+                <a className="underline hover:text-gray-700">Check out Megan&apos;s Birthday Page</a>
               </Link>
             </div>
           </div>
@@ -447,6 +481,20 @@ export default function RSVPPage() {
                                 required />
                               <span className="rsvp-body-text">Cannot attend</span>
                             </label>
+                            <div className="mt-3">
+                              <label htmlFor={`meal-${guest.id}`} className="block rsvp-body-text mb-1">Saturday meal choice</label>
+                              <select
+                                id={`meal-${guest.id}`}
+                                value={guestResponses[guest.id]?.dinnerRequest ?? ''}
+                                onChange={(e) => updateGuestMealChoice(guest.id, e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] casual-font"
+                              >
+                                <option value="">Select a meal</option>
+                                <option value="CHICKEN">Chicken</option>
+                                <option value="SALMON">Salmon</option>
+                                <option value="VEGETARIAN">Vegetarian</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
                       )}

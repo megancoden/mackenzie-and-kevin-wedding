@@ -21,7 +21,7 @@ export async function GET() {
     const guestData: ExcelGuestRow[] = []
     
     invitations.forEach((invitation, invitationIndex) => {
-      invitation.guests.forEach((guest, guestIndex) => {
+      invitation.guests.forEach((guest) => {
         guestData.push({
           'Invitation #': invitationIndex + 1,
           'Invitation ID': invitation.id,
