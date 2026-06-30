@@ -8,58 +8,41 @@ datasource db {
 }
 
 model Invitation {
-  id          String   @id @default(cuid())
-  invitationCode String @unique // Optional: for easier lookup
-  
-  // Invitation settings - what events this invitation covers
-  invitedToFriday   Boolean @default(false)
-  invitedToSaturday Boolean @default(true)
-  invitedToSunday   Boolean @default(false)
-  
-  // RSVP status for the entire invitation
-  rsvpStatus    RsvpStatus @default(PENDING)
-  rsvpSubmittedAt DateTime?
-  
-  // Additional info that applies to the whole invitation
-  dietaryRestrictions String?
-  notes             String?
-  
-  // Relationships
-  guests        Guest[]
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                  String     @id @default(cuid())
+  invitationCode      String     @unique
+  invitedToFriday     Boolean    @default(false)
+  invitedToSaturday   Boolean    @default(true)
+  invitedToSunday     Boolean    @default(false)
+  rsvpStatus          RsvpStatus @default(PENDING)
+  rsvpSubmittedAt     DateTime?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  guests              Guest[]
 }
 
 model Guest {
-  id        String   @id @default(cuid())
-  firstName String
-  lastName  String
-  email     String?
-  phone     String?
-  
-  // Guest type
-  guestType GuestType @default(NAMED_GUEST)
-  
-  // Individual RSVP responses for each event
-  fridayResponse    Response?
-  saturdayResponse  Response?
-  sundayResponse    Response?
-  
-  // Relationship to invitation
-  invitationId String
-  invitation   Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  @@index([firstName, lastName]) // For faster name searches
+  id               String          @id @default(cuid())
+  firstName        String
+  lastName         String
+  email            String?
+  guestType        GuestType       @default(NAMED_GUEST)
+  fridayResponse   Response?
+  saturdayResponse Response?
+  sundayResponse   Response?
+  dinnerRequest    MealPreference?
+  dietaryRestrictions String?
+  notes               String?
+  invitationId     String
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  invitation       Invitation      @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+
+  @@index([firstName, lastName])
 }
 
 enum GuestType {
-  NAMED_GUEST    // Specifically named guest (e.g., "John Smith")
-  PLUS_ONE       // Generic plus one (e.g., "John's Plus One")
-  CHILD          // Child guest (might have different meal options)
+  NAMED_GUEST
+  PLUS_ONE
 }
 
 enum RsvpStatus {
@@ -70,4 +53,10 @@ enum RsvpStatus {
 enum Response {
   YES
   NO
+}
+
+enum MealPreference {
+  CHICKEN
+  SALMON
+  VEGETARIAN
 }

@@ -13,6 +13,8 @@ type GuestResponsesState = Record<string, {
   fridayResponse?: Response
   saturdayResponse?: Response
   sundayResponse?: Response
+  plusOneFirstName?: string
+  plusOneLastName?: string
 }>
 
 export default function RSVPPage() {
@@ -126,17 +128,19 @@ export default function RSVPPage() {
           guestId,
           fridayResponse: responses.fridayResponse,
           saturdayResponse: responses.saturdayResponse,
-          sundayResponse: responses.sundayResponse
+          sundayResponse: responses.sundayResponse,
+          plusOneFirstName: responses.plusOneFirstName?.trim() || undefined,
+          plusOneLastName: responses.plusOneLastName?.trim() || undefined
         })),
         ...invitationNotes
       }
-      
+
       const response = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestData)
       })
-      
+
       const data = await response.json()
       if (response.ok) {
         // Show confirmation card with returned invitation data
@@ -158,6 +162,26 @@ export default function RSVPPage() {
       [guestId]: {
         ...prev[guestId],
         [`${event}Response`]: response as Response
+      }
+    }))
+  }
+
+  const updateGuestPlusOneFirstName = (guestId: string, value: string) => {
+    setGuestResponses(prev => ({
+      ...prev,
+      [guestId]: {
+        ...prev[guestId],
+        plusOneFirstName: value
+      }
+    }))
+  }
+
+  const updateGuestPlusOneLastName = (guestId: string, value: string) => {
+    setGuestResponses(prev => ({
+      ...prev,
+      [guestId]: {
+        ...prev[guestId],
+        plusOneLastName: value
       }
     }))
   }
@@ -327,15 +351,48 @@ export default function RSVPPage() {
                       {guest.firstName} {guest.lastName}
                       <span className="text-wedding-secondary fancy-font ml-1 text-lg">
                         {guest.guestType === 'PLUS_ONE' && "(Plus One)"}
-                        {guest.guestType === 'CHILD' && "(Child)"}
                       </span>
                     </h3>
+
+                    {guest.guestType === 'PLUS_ONE' && (
+                      <div className="mb-4 grid gap-4 md:grid-cols-2">
+                        <div>
+                          <label htmlFor={`plusOneFirstName-${guest.id}`} className="block rsvp-body-text mb-1">
+                            Plus one first name (optional)
+                          </label>
+                          <input
+                            type="text"
+                            id={`plusOneFirstName-${guest.id}`}
+                            value={guestResponses[guest.id]?.plusOneFirstName ?? ''}
+                            onChange={(e) => updateGuestPlusOneFirstName(guest.id, e.target.value)}
+                            placeholder="First name"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] casual-font"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`plusOneLastName-${guest.id}`} className="block rsvp-body-text mb-1">
+                            Plus one last name (optional)
+                          </label>
+                          <input
+                            type="text"
+                            id={`plusOneLastName-${guest.id}`}
+                            value={guestResponses[guest.id]?.plusOneLastName ?? ''}
+                            onChange={(e) => updateGuestPlusOneLastName(guest.id, e.target.value)}
+                            placeholder="Last name"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] casual-font"
+                          />
+                        </div>
+                      </div>
+                    )}
 
                     <div className="grid gap-4 md:grid-cols-3">
                       {/* Friday Event */}
                       {invitation.invitedToFriday && (
                         <div>
-                          <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Friday Welcome Dinner</h4>
+                          <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Friday Welcome Drinks and Appetizers</h4>
+                          <div className="text-sm text-wedding-secondary/80">7-9pm at Library Pub</div>
+                          <div className="text-sm text-wedding-secondary/80">6363 Haggerty Rd, West Bloomfield, MI 48322</div>
+                          <div className="text-sm text-wedding-secondary/80 mb-2">Casual attire</div>
                           <div className="space-y-2">
                             <label className="flex items-center mb-0">
                               <input
@@ -398,6 +455,9 @@ export default function RSVPPage() {
                       {invitation.invitedToSunday && (
                         <div>
                           <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Sunday Brunch</h4>
+                          <div className="text-sm text-wedding-secondary/80">Begins at 10am at the Coden Home</div>
+                          <div className="text-sm text-wedding-secondary/80">6655 Carlyle Ct, West Bloomfield, MI 48322</div>
+                          <div className="text-sm text-wedding-secondary/80">Come and go as you please!</div>
                           <div className="space-y-2">
                             <label className="flex items-center mb-0">
                               <input

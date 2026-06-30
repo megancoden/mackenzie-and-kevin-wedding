@@ -18,9 +18,10 @@ const VENMO_FUNDS = [
   { icon: "🎓", title: "Grad school tuition",    sub: "invest in her future self",                note: "Grad School Tuition Fund 🎓" },
   { icon: "🍽️", title: "Buy Megan dinner",          sub: "she's been eating instant ramen",        note: "Buy Megan Dinner 🍽️" },
   { icon: "🏠", title: "Rent contribution",       sub: "adulting is expensive",                    note: "Rent Fund 🏠" },
-    { icon: "🛋️", title: "Therapy fund",            sub: "processing the quarter life crisis",       note: "Therapy Fund 🛋️" },
+  { icon: "🛋️", title: "Therapy fund",            sub: "processing the quarter life crisis",       note: "Therapy Fund 🛋️" },
   { icon: "🍕", title: "Emergency snack fund",    sub: "for midnight study session cravings",      note: "Emergency Snack Fund 🍕" },
-  { icon: "🎂", title: "Treat yourself fund",     sub: "she deserves something fun, ok?",          note: "Birthday Treat Yourself Fund 🎂" },
+  { icon: "🤸", title: "Gymnastics practice fund",     sub: "she can flip out physically instead of mentally",          note: "Gymnastics Practice Fund 🤸" },
+  { icon: "🎂", title: "Treat yourself fund",     sub: "she deserves something fun",          note: "Birthday Treat Yourself Fund 🎂" },
 ];
 
 const AMAZON_ITEMS = [

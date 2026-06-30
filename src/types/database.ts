@@ -19,6 +19,8 @@ export interface GuestResponseData {
   fridayResponse?: Response
   saturdayResponse?: Response  
   sundayResponse?: Response
+  plusOneFirstName?: string
+  plusOneLastName?: string
 }
 
 export interface RSVPSubmissionData {

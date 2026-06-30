@@ -55,26 +55,43 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const data = await request.json()
-    const { 
-      invitationId,
-      guestResponses, // Array of { guestId, fridayResponse, saturdayResponse, sundayResponse }
-      dietaryRestrictions,
-      notes 
-    } = data
-    
+    const body = await request.json() as {
+      invitationId: string
+      guestResponses: Array<{
+        guestId: string
+        fridayResponse?: string | null
+        saturdayResponse?: string | null
+        sundayResponse?: string | null
+        plusOneFirstName?: string | null
+        plusOneLastName?: string | null
+      }>
+      dietaryRestrictions?: string | null
+      notes?: string | null
+    }
+
+    const { invitationId, guestResponses, dietaryRestrictions, notes } = body
+
     // Start a transaction to update all guests and the invitation
     const result = await prisma.$transaction(async (tx) => {
       // Update each guest's responses
       for (const response of guestResponses) {
+        const updateData: any = {
+          fridayResponse: response.fridayResponse ?? null,
+          saturdayResponse: response.saturdayResponse ?? null,
+          sundayResponse: response.sundayResponse ?? null,
+          updatedAt: new Date()
+        }
+
+        if (typeof response.plusOneFirstName === 'string' && response.plusOneFirstName.trim()) {
+          updateData.firstName = response.plusOneFirstName.trim()
+        }
+        if (typeof response.plusOneLastName === 'string' && response.plusOneLastName.trim()) {
+          updateData.lastName = response.plusOneLastName.trim()
+        }
+
         await tx.guest.update({
           where: { id: response.guestId },
-          data: {
-            fridayResponse: response.fridayResponse || null,
-            saturdayResponse: response.saturdayResponse || null,
-            sundayResponse: response.sundayResponse || null,
-            updatedAt: new Date()
-          }
+          data: updateData
         })
       }
       
@@ -87,11 +104,11 @@ export async function POST(request: Request) {
           dietaryRestrictions: dietaryRestrictions || null,
           notes: notes || null,
           updatedAt: new Date()
-        },
+        } as any,
         include: {
           guests: true
         }
-      })
+      }) as any
       
       return updatedInvitation
     })

@@ -17,7 +17,6 @@ async function main() {
           firstName: 'John',
           lastName: 'Smith',
           email: 'john.smith@example.com',
-          phone: '555-0123',
           guestType: 'NAMED_GUEST'
         },
         {
@@ -29,7 +28,7 @@ async function main() {
         {
           firstName: 'Tommy',
           lastName: 'Smith',
-          guestType: 'CHILD'
+          guestType: 'NAMED_GUEST'
         }
       ]
     },
@@ -91,7 +90,6 @@ async function main() {
           firstName: 'Emily',
           lastName: 'Wilson',
           email: 'megancoden@gmail.com',
-          phone: '555-0456',
           guestType: 'NAMED_GUEST'
         }
       ]
