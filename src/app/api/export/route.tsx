@@ -22,6 +22,8 @@ export async function GET() {
     
     invitations.forEach((invitation, invitationIndex) => {
       invitation.guests.forEach((guest) => {
+        const guestWithExtras = guest as { dietaryRestrictions?: string | null; notes?: string | null }
+
         guestData.push({
           'Invitation #': invitationIndex + 1,
           'Invitation ID': invitation.id,
@@ -37,8 +39,8 @@ export async function GET() {
           'Sunday Response': guest.sundayResponse || 'No Response',
           'RSVP Status': invitation.rsvpStatus,
           'RSVP Submitted': invitation.rsvpSubmittedAt ? invitation.rsvpSubmittedAt.toLocaleDateString() : '',
-          'Dietary Restrictions': guest.dietaryRestrictions || '',
-          'Notes': guest.notes || '',
+          'Dietary Restrictions': guestWithExtras.dietaryRestrictions || '',
+          'Notes': guestWithExtras.notes || '',
           'Created At': invitation.createdAt.toLocaleDateString(),
           'Updated At': invitation.updatedAt.toLocaleDateString()
         })
@@ -51,6 +53,8 @@ export async function GET() {
       const attendingSaturday = invitation.guests.filter(g => g.saturdayResponse === 'YES').length
       const attendingSunday = invitation.guests.filter(g => g.sundayResponse === 'YES').length
       
+      const primaryGuest = invitation.guests[0] as { dietaryRestrictions?: string | null; notes?: string | null } | undefined
+
       return {
         'Invitation #': index + 1,
         'Primary Guest': invitation.guests[0] ? `${invitation.guests[0].firstName} ${invitation.guests[0].lastName}` : '',
@@ -59,8 +63,8 @@ export async function GET() {
         'Attending Friday': attendingFriday,
         'Attending Saturday': attendingSaturday,
         'Attending Sunday': attendingSunday,
-        'Dietary Restrictions': invitation.guests[0]?.dietaryRestrictions || '',
-        'Notes': invitation.guests[0]?.notes || ''
+        'Dietary Restrictions': primaryGuest?.dietaryRestrictions || '',
+        'Notes': primaryGuest?.notes || ''
       }
     })
     
