@@ -38,7 +38,6 @@ export interface ExcelGuestRow {
   'First Name': string
   'Last Name': string
   'Email': string
-  'Phone': string
   'Invited to Friday': string
   'Invited to Saturday': string
   'Invited to Sunday': string

@@ -1,6 +1,7 @@
+import { randomBytes } from 'crypto'
+
 const XLSX = require('xlsx')
 const { PrismaClient, GuestType } = require('@prisma/client')
-const crypto = require('crypto')
 const path = require('path')
 
 const prisma = new PrismaClient()
@@ -8,19 +9,19 @@ const prisma = new PrismaClient()
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function generateCode() {
-  return crypto.randomBytes(3).toString('hex').toUpperCase()
+  return randomBytes(3).toString('hex').toUpperCase()
 }
 
 const TITLES = ['Mr.', 'Mrs.', 'Ms.', 'Dr.', 'Miss', 'Rev.', 'Prof.']
 
-function stripTitle(str) {
+function stripTitle(str: string) {
   for (const title of TITLES) {
     if (str.startsWith(title)) return str.slice(title.length).trim()
   }
   return str.trim()
 }
 
-function parseBool(val) {
+function parseBool(val: boolean) {
   if (!val) return false
   return String(val).trim().toLowerCase() === 'y'
 }
@@ -32,8 +33,8 @@ function parseBool(val) {
  *   "Mrs. Barbara Coden and Guest"
  *   "Ms. Megan Coden"
  */
-function parseGuests(raw) {
-  const parts = raw.split(/\s+and\s+/i).map(s => s.trim())
+function parseGuests(raw: string) {
+  const parts = raw.split(/\s+and\s+/i).map((s: string) => s.trim())
   const guests = []
   const parsed = []
 
@@ -85,7 +86,7 @@ async function main() {
   const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' })
 
   // Find the relevant column names (trim whitespace from headers)
-  const normalize = str => String(str).trim().toLowerCase()
+  const normalize = (str: string) => String(str).trim().toLowerCase()
 
   console.log(`Found ${rows.length} rows. Importing...\n`)
 
@@ -95,7 +96,7 @@ async function main() {
 
   for (const row of rows) {
     // Normalize keys to handle extra spaces in column names
-    const get = (key) => {
+    const get = (key: string) => {
       for (const [k, v] of Object.entries(row)) {
         if (normalize(k).includes(normalize(key))) return v
       }
@@ -106,8 +107,8 @@ async function main() {
     if (!rawName) { skipped++; continue }
 
     const email = String(get('email')).trim() || null
-    const invitedToFriday = parseBool(get('Friday'))
-    const invitedToSunday = parseBool(get('Sunday'))
+    const invitedToFriday = parseBool(get('Friday') as boolean)
+    const invitedToSunday = parseBool(get('Sunday') as boolean)
 
     const guests = parseGuests(rawName)
 

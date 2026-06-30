@@ -29,7 +29,6 @@ export async function GET() {
           'First Name': guest.firstName,
           'Last Name': guest.lastName,
           'Email': guest.email || '',
-          'Phone': guest.phone || '',
           'Invited to Friday': invitation.invitedToFriday ? 'Yes' : 'No',
           'Invited to Saturday': invitation.invitedToSaturday ? 'Yes' : 'No',
           'Invited to Sunday': invitation.invitedToSunday ? 'Yes' : 'No',
@@ -38,8 +37,8 @@ export async function GET() {
           'Sunday Response': guest.sundayResponse || 'No Response',
           'RSVP Status': invitation.rsvpStatus,
           'RSVP Submitted': invitation.rsvpSubmittedAt ? invitation.rsvpSubmittedAt.toLocaleDateString() : '',
-          'Dietary Restrictions': invitation.dietaryRestrictions || '',
-          'Notes': invitation.notes || '',
+          'Dietary Restrictions': guest.dietaryRestrictions || '',
+          'Notes': guest.notes || '',
           'Created At': invitation.createdAt.toLocaleDateString(),
           'Updated At': invitation.updatedAt.toLocaleDateString()
         })
@@ -60,8 +59,8 @@ export async function GET() {
         'Attending Friday': attendingFriday,
         'Attending Saturday': attendingSaturday,
         'Attending Sunday': attendingSunday,
-        'Dietary Restrictions': invitation.dietaryRestrictions || '',
-        'Notes': invitation.notes || ''
+        'Dietary Restrictions': invitation.guests[0]?.dietaryRestrictions || '',
+        'Notes': invitation.guests[0]?.notes || ''
       }
     })
     
