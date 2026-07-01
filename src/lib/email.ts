@@ -40,10 +40,10 @@ function formatMealPreference(meal?: string | null) {
 
 function buildEmailBody(invitation: InvitationWithGuests) {
   const columns = [
-    { key: 'friday', label: 'Friday', visible: invitation.invitedToFriday },
-    { key: 'saturday', label: 'Saturday', visible: invitation.invitedToSaturday },
-    { key: 'sunday', label: 'Sunday', visible: invitation.invitedToSunday },
-    { key: 'meal', label: 'Saturday Meal', visible: invitation.invitedToSaturday }
+    { key: 'friday', label: 'Friday Drinks', visible: invitation.invitedToFriday },
+    { key: 'saturday', label: 'Wedding', visible: invitation.invitedToSaturday },
+    { key: 'meal', label: 'Wedding Meal', visible: invitation.invitedToSaturday },
+    { key: 'sunday', label: 'Sunday Brunch', visible: invitation.invitedToSunday }
   ].filter(column => column.visible)
 
   const primaryGuest = invitation.guests.find((guest) => guest.firstName && guest.lastName) || invitation.guests[0]

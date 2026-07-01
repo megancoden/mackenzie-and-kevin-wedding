@@ -70,7 +70,8 @@ export default function RSVPPage() {
           notes: data.invitation.guests[0]?.notes || ''
         })
       } else {
-        setError(data.error || 'Guest not found')
+        // TODO: TEST THIS
+        throw new Error(data.error || 'Guest not found')
       }
     } catch (error) {
       console.error('Lookup error:', error)
@@ -318,10 +319,10 @@ export default function RSVPPage() {
                 <thead>
                   <tr>
                     <th className="pb-2">Guest</th>
-                    {submittedInvitation.invitedToFriday && <th className="pb-2">Friday</th>}
-                    {submittedInvitation.invitedToSaturday && <th className="pb-2">Saturday</th>}
-                    {submittedInvitation.invitedToSunday && <th className="pb-2">Sunday</th>}
-                    {submittedInvitation.invitedToSaturday && <th className="pb-2">Saturday Meal</th>}
+                    {submittedInvitation.invitedToFriday && <th className="pb-2">Friday Drinks</th>}
+                    {submittedInvitation.invitedToSaturday && <th className="pb-2">Wedding</th>}
+                    {submittedInvitation.invitedToSaturday && <th className="pb-2">Wedding Meal</th>}
+                    {submittedInvitation.invitedToSunday && <th className="pb-2">Sunday Brunch</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -330,8 +331,8 @@ export default function RSVPPage() {
                       <td className="py-2">{g.firstName} {g.lastName}</td>
                       {submittedInvitation.invitedToFriday && <td className="py-2">{g.fridayResponse ?? 'No response'}</td>}
                       {submittedInvitation.invitedToSaturday && <td className="py-2">{g.saturdayResponse ?? 'No response'}</td>}
-                      {submittedInvitation.invitedToSunday && <td className="py-2">{g.sundayResponse ?? 'No response'}</td>}
                       {submittedInvitation.invitedToSaturday && <td className="py-2">{formatMealChoice(g.dinnerRequest)}</td>}
+                      {submittedInvitation.invitedToSunday && <td className="py-2">{g.sundayResponse ?? 'No response'}</td>}
                     </tr>
                   ))}
                 </tbody>
@@ -384,7 +385,7 @@ export default function RSVPPage() {
                     <h3 className="font-bold text-wedding-secondary-dark mb-3 fancy-font text-xl">
                       {guest.firstName} {guest.lastName}
                       <span className="text-wedding-secondary fancy-font ml-1 text-lg">
-                        {guest.guestType === 'PLUS_ONE' && "(Plus One)"}
+                        {guest.guestType === 'PLUS_ONE' && guest.firstName !== "PLUS_ONE" ? ' (Plus One)' : ''}
                       </span>
                     </h3>
 
@@ -424,9 +425,6 @@ export default function RSVPPage() {
                       {invitation.invitedToFriday && (
                         <div>
                           <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Friday Welcome Drinks and Appetizers</h4>
-                          <div className="text-sm text-wedding-secondary/80">7-9pm at Library Pub</div>
-                          <div className="text-sm text-wedding-secondary/80">6363 Haggerty Rd, West Bloomfield, MI 48322</div>
-                          <div className="text-sm text-wedding-secondary/80 mb-2">Casual attire</div>
                           <div className="space-y-2">
                             <label className="flex items-center mb-0">
                               <input
@@ -503,9 +501,6 @@ export default function RSVPPage() {
                       {invitation.invitedToSunday && (
                         <div>
                           <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Sunday Brunch</h4>
-                          <div className="text-sm text-wedding-secondary/80">Begins at 10am at the Coden Home</div>
-                          <div className="text-sm text-wedding-secondary/80">6655 Carlyle Ct, West Bloomfield, MI 48322</div>
-                          <div className="text-sm text-wedding-secondary/80">Come and go as you please!</div>
                           <div className="space-y-2">
                             <label className="flex items-center mb-0">
                               <input
