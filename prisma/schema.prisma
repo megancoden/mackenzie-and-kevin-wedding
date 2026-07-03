@@ -21,21 +21,22 @@ model Invitation {
 }
 
 model Guest {
-  id               String          @id @default(cuid())
-  firstName        String
-  lastName         String
-  email            String?
-  guestType        GuestType       @default(NAMED_GUEST)
-  fridayResponse   Response?
-  saturdayResponse Response?
-  sundayResponse   Response?
-  dinnerRequest    MealPreference?
-  dietaryRestrictions String?
-  notes               String?
-  invitationId     String
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  invitation       Invitation      @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+  id                   String          @id @default(cuid())
+  firstName            String
+  lastName             String
+  email                String?
+  knowsMegan           Boolean         @default(false)
+  guestType            GuestType       @default(NAMED_GUEST)
+  fridayResponse       Response?
+  saturdayResponse     Response?
+  sundayResponse       Response?
+  dinnerRequest        MealPreference?
+  dietaryRestrictions  String?
+  notes                String?
+  invitationId         String
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  invitation           Invitation      @relation(fields: [invitationId], references: [id], onDelete: Cascade)
 
   @@index([firstName, lastName])
 }

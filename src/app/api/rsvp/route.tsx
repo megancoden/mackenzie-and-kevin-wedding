@@ -79,11 +79,12 @@ export async function POST(request: Request) {
     const result = await prisma.$transaction(async (tx) => {
       // Update each guest's responses
       for (const response of guestResponses) {
+        const shouldClearMealChoice = response.saturdayResponse === 'NO'
         const updateData: Record<string, unknown> = {
           fridayResponse: response.fridayResponse ?? null,
           saturdayResponse: response.saturdayResponse ?? null,
           sundayResponse: response.sundayResponse ?? null,
-          dinnerRequest: response.dinnerRequest ?? null,
+          dinnerRequest: shouldClearMealChoice ? null : (response.dinnerRequest ?? null),
           updatedAt: new Date()
         }
 

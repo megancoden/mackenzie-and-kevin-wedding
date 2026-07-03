@@ -64,6 +64,7 @@ function parseGuests(raw: string) {
       firstName: p.firstName,
       lastName: p.lastName ?? sharedLastName,
       guestType: p.isGuest ? 'PLUS_ONE' : 'NAMED_GUEST',
+      knowsMegan: false,
     })
   }
 
@@ -123,6 +124,7 @@ async function main() {
             firstName: g.firstName,
             lastName: g.lastName,
             guestType: g.guestType,
+            knowsMegan: false,
             email: g.guestType === 'NAMED_GUEST' && guests.indexOf(g) === 0 ? email : null,
           })),
         },

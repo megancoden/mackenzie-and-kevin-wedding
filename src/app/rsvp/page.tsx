@@ -327,6 +327,7 @@ export default function RSVPPage() {
     const email = confirmationEmail || ''
     const returnGuest = searchedGuest || submittedInvitation.guests[0]
     const returnLink = `/rsvp?firstName=${encodeURIComponent(returnGuest?.firstName || '')}&lastName=${encodeURIComponent(returnGuest?.lastName || '')}`
+    const showBirthdayPageLink = submittedInvitation.guests.some((guest) => guest.knowsMegan)
 
     return (
       <>
@@ -379,10 +380,14 @@ export default function RSVPPage() {
               <Link href={returnLink} legacyBehavior>
                 <a className="py-3 px-6 rsvp-button inline-block text-center">Modify RSVP</a>
               </Link>
-              <div>P.S. Mackenzie&apos;s sister Megan is turning 25 on October 16th!</div>
-              <Link href="/happy-birthday-megan" legacyBehavior>
-                <a className="underline hover:text-gray-700">Check out Megan&apos;s Birthday Page</a>
-              </Link>
+              {showBirthdayPageLink && (
+                <>
+                  <div>P.S. Mackenzie&apos;s sister Megan is turning 25 on October 16th!</div>
+                  <Link href="/happy-birthday-megan" legacyBehavior>
+                    <a className="underline hover:text-gray-700">Check out Megan&apos;s Birthday Page</a>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -510,6 +515,7 @@ export default function RSVPPage() {
                                 required />
                               <span className="rsvp-body-text">Cannot attend</span>
                             </label>
+                            {guestResponses[guest.id]?.saturdayResponse === 'YES' && (
                             <div className="mt-3">
                               <label htmlFor={`meal-${guest.id}`} className="block rsvp-body-text mb-1">Saturday meal choice</label>
                               <select
@@ -525,6 +531,7 @@ export default function RSVPPage() {
                                 <option value="VEGETARIAN">Vegetarian</option>
                               </select>
                             </div>
+                            )}
                           </div>
                         </div>
                       )}
