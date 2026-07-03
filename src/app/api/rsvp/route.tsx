@@ -3,6 +3,9 @@ import type { MealPreference } from '@prisma/client'
 import { prisma } from '@/lib/db'
 import { sendRsvpConfirmationEmail } from '@/lib/email'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const firstName = searchParams.get('firstName')
@@ -77,6 +80,8 @@ export async function POST(request: Request) {
 
     // Start a transaction to update all guests and the invitation
     const result = await prisma.$transaction(async (tx) => {
+      const persistedGuestIds = new Set<string>()
+
       // Update each guest's responses
       for (const response of guestResponses) {
         const shouldClearMealChoice = response.saturdayResponse === 'NO'
@@ -95,10 +100,16 @@ export async function POST(request: Request) {
           updateData.lastName = response.plusOneLastName.trim()
         }
 
-        await tx.guest.update({
+        const updatedGuest = await tx.guest.update({
           where: { id: response.guestId },
           data: updateData
         })
+
+        persistedGuestIds.add(updatedGuest.id)
+      }
+
+      if (persistedGuestIds.size === 0) {
+        throw new Error('No guest rows were updated')
       }
       
       if (emailGuestId && emailAddress?.trim()) {
@@ -131,6 +142,10 @@ export async function POST(request: Request) {
           guests: true
         }
       })
+
+      if (!updatedInvitation.id) {
+        throw new Error('Invitation was not persisted')
+      }
       
       return updatedInvitation
     })
