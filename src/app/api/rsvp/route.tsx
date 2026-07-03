@@ -67,11 +67,13 @@ export async function POST(request: Request) {
         plusOneFirstName?: string | null
         plusOneLastName?: string | null
       }>
+      emailGuestId?: string | null
+      emailAddress?: string | null
       dietaryRestrictions?: string | null
       notes?: string | null
     }
 
-    const { invitationId, guestResponses, dietaryRestrictions, notes } = body
+    const { invitationId, guestResponses, emailGuestId, emailAddress, dietaryRestrictions, notes } = body
 
     // Start a transaction to update all guests and the invitation
     const result = await prisma.$transaction(async (tx) => {
@@ -98,6 +100,13 @@ export async function POST(request: Request) {
         })
       }
       
+      if (emailGuestId && emailAddress?.trim()) {
+        await tx.guest.update({
+          where: { id: emailGuestId },
+          data: { email: emailAddress.trim() }
+        })
+      }
+
       await tx.guest.updateMany({
         where: { invitationId },
         data: {
@@ -125,11 +134,13 @@ export async function POST(request: Request) {
       return updatedInvitation
     })
 
+    const confirmationEmail = emailAddress?.trim() || result.guests.find((guest) => guest.email?.trim())?.email || null
+
     sendRsvpConfirmationEmail(result).catch((emailError) => {
       console.error('Failed to send RSVP confirmation email:', emailError)
     })
     
-    return NextResponse.json({ success: true, invitation: result })
+    return NextResponse.json({ success: true, invitation: result, confirmationEmail })
   } catch (error) {
     console.error('RSVP error:', error)
     return NextResponse.json({ error: 'Failed to save RSVP' }, { status: 500 })

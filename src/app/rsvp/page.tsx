@@ -37,9 +37,11 @@ export default function RSVPPage() {
   })
   const [firstNameSearch, setFirstNameSearch] = useState<string>('')
   const [lastNameSearch, setLastNameSearch] = useState<string>('')
+  const [contactEmail, setContactEmail] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [submittedInvitation, setSubmittedInvitation] = useState<InvitationWithGuests | null>(null)
+  const [confirmationEmail, setConfirmationEmail] = useState<string>('')
 
   const lookupGuestByName = async (firstName: string, lastName: string) => {
     setLoading(true)
@@ -53,6 +55,9 @@ export default function RSVPPage() {
         setInvitation(data.invitation)
         setSearchedGuest(data.searchedGuest)
         setStep('form')
+        setSubmittedInvitation(null)
+        setConfirmationEmail('')
+        setError('')
 
         const responses: GuestResponsesState = {}
         data.invitation.guests.forEach((guest: Guest) => {
@@ -69,13 +74,13 @@ export default function RSVPPage() {
           dietaryRestrictions: data.invitation.guests[0]?.dietaryRestrictions || '',
           notes: data.invitation.guests[0]?.notes || ''
         })
+        setContactEmail(data.searchedGuest.email || '')
       } else {
-        // TODO: TEST THIS
-        throw new Error(data.error || 'Guest not found')
+        throw data.error;
       }
     } catch (error) {
       console.error('Lookup error:', error)
-      setError('Failed to find guest. Please try again.')
+      setError(error instanceof Error ? error.message : 'We couldn’t find that name. Please check the name on your invitation and try again.')
     } finally {
       setLoading(false)
     }
@@ -108,6 +113,14 @@ export default function RSVPPage() {
     
     if (!invitation) {
       setError('No invitation found')
+      setLoading(false)
+      return
+    }
+
+    const primaryGuestId = searchedGuest?.id
+
+    if (!primaryGuestId) {
+      setError('Please find your invitation before submitting your RSVP.')
       setLoading(false)
       return
     }
@@ -155,6 +168,8 @@ export default function RSVPPage() {
           plusOneFirstName: responses.plusOneFirstName?.trim() || undefined,
           plusOneLastName: responses.plusOneLastName?.trim() || undefined
         })),
+        emailGuestId: primaryGuestId,
+        emailAddress: contactEmail.trim() || null,
         ...invitationNotes
       }
 
@@ -166,8 +181,8 @@ export default function RSVPPage() {
 
       const data = await response.json()
       if (response.ok) {
-        // Show confirmation card with returned invitation data
         setSubmittedInvitation(data.invitation || invitation)
+        setConfirmationEmail(data.confirmationEmail || contactEmail.trim() || '')
       } else {
         setError(data.error || 'Failed to submit RSVP')
       }
@@ -222,6 +237,18 @@ export default function RSVPPage() {
   const updateInvitationNotes = (field: keyof InvitationNotes, value: string) => {
     setInvitationNotes(prev => ({ ...prev, [field]: value }))
   }
+
+  const showEmailField = !invitation?.guests.some(guest => guest.email?.trim())
+  const isFormComplete = invitation ? invitation.guests.every(guest => {
+    const guestResponsesForGuest = guestResponses[guest.id]
+
+    if (invitation.invitedToFriday && !guestResponsesForGuest?.fridayResponse) return false
+    if (invitation.invitedToSaturday && !guestResponsesForGuest?.saturdayResponse) return false
+    if (invitation.invitedToSunday && !guestResponsesForGuest?.sundayResponse) return false
+    if (invitation.invitedToSaturday && guestResponsesForGuest?.saturdayResponse === 'YES' && !guestResponsesForGuest?.dinnerRequest) return false
+
+    return true
+  }) : false
 
   if (step === 'lookup') {
     return (
@@ -297,7 +324,7 @@ export default function RSVPPage() {
   }
 
   if (submittedInvitation) {
-    const email = searchedGuest?.email || 'No email on file'
+    const email = confirmationEmail || ''
     const returnGuest = searchedGuest || submittedInvitation.guests[0]
     const returnLink = `/rsvp?firstName=${encodeURIComponent(returnGuest?.firstName || '')}&lastName=${encodeURIComponent(returnGuest?.lastName || '')}`
 
@@ -311,7 +338,11 @@ export default function RSVPPage() {
           <div className="max-w-3xl mx-auto bg-[#f2f5f3] rounded-lg shadow-md p-6 casual-font">
             <h2 className="text-2xl font-bold fancy-font text-wedding-secondary-dark mb-4">RSVP submitted successfully</h2>
 
-            <p className="mb-4">A confirmation was sent to: <strong>{email}</strong></p>
+            {email ? (
+              <p className="mb-4">A confirmation was sent to: <strong>{email}</strong></p>
+            ) : (
+              <p className="mb-4">Your RSVP has been saved. No confirmation email was sent because no email address was provided.</p>
+            )}
 
             <div className="mb-6">
               <h3 className="font-semibold mb-2">Summary</h3>
@@ -424,7 +455,7 @@ export default function RSVPPage() {
                       {/* Friday Event */}
                       {invitation.invitedToFriday && (
                         <div>
-                          <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Friday Welcome Drinks and Appetizers</h4>
+                          <h4 className="rsvp-body-text text-wedding-secondary-dark mb-1">Friday Welcome Drinks</h4>
                           <div className="space-y-2">
                             <label className="flex items-center mb-0">
                               <input
@@ -485,6 +516,7 @@ export default function RSVPPage() {
                                 id={`meal-${guest.id}`}
                                 value={guestResponses[guest.id]?.dinnerRequest ?? ''}
                                 onChange={(e) => updateGuestMealChoice(guest.id, e.target.value)}
+                                required={guestResponses[guest.id]?.saturdayResponse === 'YES'}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] casual-font"
                               >
                                 <option value="">Select a meal</option>
@@ -536,7 +568,6 @@ export default function RSVPPage() {
             {/* Additional Information */}
             <div className="mb-8">
               <h2 className="header-title mb-2" style={{ fontSize: "24px", fontWeight: "bold"}}>Additional Information</h2>
-
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <label htmlFor="dietary" className="block rsvp-body-text mb-1">
@@ -564,6 +595,22 @@ export default function RSVPPage() {
                     placeholder="Any special messages or requests..." />
                 </div>
               </div>
+                            {showEmailField && (
+                <div className="mb-4">
+                  <label htmlFor="contactEmail" className="block rsvp-body-text mb-1">
+                    Email address (optional)
+                  </label>
+                  <input
+                    type="email"
+                    id="contactEmail"
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    className="w-full px-3 py-2 border border-[var(--wedding-primary-dark)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--wedding-primary-dark)] casual-font"
+                    placeholder="Enter an email to receive your confirmation"
+                  />
+                  <p className="mt-1 text-sm text-gray-600 casual-font">We’ll use this only to send your RSVP confirmation.</p>
+                </div>
+              )}
             </div>
 
             {error && (
@@ -582,8 +629,8 @@ export default function RSVPPage() {
               </button>
               <button
                 type="submit"
-                disabled={loading}
-                className="py-3 px-6 rsvp-button"
+                disabled={loading || !isFormComplete}
+                className="py-3 px-6 rsvp-button disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? 'Submitting...' : 'Submit RSVP for All Guests'}
               </button>
