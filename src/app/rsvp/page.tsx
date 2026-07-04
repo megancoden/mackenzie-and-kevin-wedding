@@ -3,7 +3,8 @@
 import { FormStep, InvitationWithGuests, Guest, Response } from '@/types'
 import type { MealPreference } from '@prisma/client'
 import Link from 'next/link'
-import { useState, useEffect, FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect, useCallback, FormEvent } from 'react'
 
 interface InvitationNotes {
   dietaryRestrictions: string
@@ -42,8 +43,14 @@ export default function RSVPPage() {
   const [error, setError] = useState<string>('')
   const [submittedInvitation, setSubmittedInvitation] = useState<InvitationWithGuests | null>(null)
   const [confirmationEmail, setConfirmationEmail] = useState<string>('')
+  const router = useRouter()
 
-  const lookupGuestByName = async (firstName: string, lastName: string) => {
+  const clearLookupFields = useCallback(() => {
+    setFirstNameSearch('')
+    setLastNameSearch('')
+  }, [])
+
+  const lookupGuestByName = useCallback(async (firstName: string, lastName: string) => {
     setLoading(true)
     setError('')
 
@@ -58,6 +65,7 @@ export default function RSVPPage() {
         setSubmittedInvitation(null)
         setConfirmationEmail('')
         setError('')
+        clearLookupFields()
 
         const responses: GuestResponsesState = {}
         data.invitation.guests.forEach((guest: Guest) => {
@@ -84,7 +92,7 @@ export default function RSVPPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [clearLookupFields])
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -99,7 +107,7 @@ export default function RSVPPage() {
     if (firstName && lastName && step === 'lookup' && !invitation && !loading) {
       lookupGuestByName(firstName, lastName)
     }
-  }, [step, invitation, loading])
+  }, [step, invitation, loading, lookupGuestByName])
 
   const handleLookup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -329,6 +337,18 @@ export default function RSVPPage() {
     const returnLink = `/rsvp?firstName=${encodeURIComponent(returnGuest?.firstName || '')}&lastName=${encodeURIComponent(returnGuest?.lastName || '')}`
     const showBirthdayPageLink = submittedInvitation.guests.some((guest) => guest.knowsMegan)
 
+    const handleModifyRsvp = async () => {
+      if (!returnGuest?.firstName || !returnGuest?.lastName) return
+
+      setSubmittedInvitation(null)
+      setConfirmationEmail('')
+      setError('')
+      setFirstNameSearch(returnGuest.firstName)
+      setLastNameSearch(returnGuest.lastName)
+      router.push(returnLink)
+      await lookupGuestByName(returnGuest.firstName, returnGuest.lastName)
+    }
+
     return (
       <>
         <Link href="/" legacyBehavior>
@@ -377,9 +397,14 @@ export default function RSVPPage() {
             </div>
 
             <div className="flex flex-col gap-4">
-              <Link href={returnLink} legacyBehavior>
-                <a className="py-3 px-6 rsvp-button inline-block text-center">Modify RSVP</a>
-              </Link>
+              <button
+                type="button"
+                onClick={() => void handleModifyRsvp()}
+                disabled={loading}
+                className="py-3 px-6 rsvp-button inline-block text-center disabled:opacity-70"
+              >
+                {loading ? 'Loading...' : 'Modify RSVP'}
+              </button>
               {showBirthdayPageLink && (
                 <>
                   <div>P.S. Mackenzie&apos;s sister Megan is turning 25 on October 16th!</div>

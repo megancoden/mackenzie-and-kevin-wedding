@@ -112,10 +112,13 @@ export async function POST(request: Request) {
         throw new Error('No guest rows were updated')
       }
       
-      if (emailGuestId && emailAddress?.trim()) {
+      const recipientEmail = emailAddress?.trim() || null
+      const emailTargetGuestId = emailGuestId || guestResponses[0]?.guestId || null
+
+      if (emailTargetGuestId && recipientEmail) {
         await tx.guest.update({
-          where: { id: emailGuestId },
-          data: { email: emailAddress.trim() }
+          where: { id: emailTargetGuestId },
+          data: { email: recipientEmail }
         })
       }
 
@@ -150,9 +153,21 @@ export async function POST(request: Request) {
       return updatedInvitation
     })
 
-    const confirmationEmail = emailAddress?.trim() || result.guests.find((guest) => guest.email?.trim())?.email || null
+    const recipientEmail = emailAddress?.trim() || result.guests.find((guest) => guest.email?.trim())?.email || null
+    const confirmationEmail = recipientEmail
 
-    sendRsvpConfirmationEmail(result).catch((emailError) => {
+    const invitationForEmail = recipientEmail
+      ? {
+          ...result,
+          guests: result.guests.map((guest) =>
+            guest.id === (emailGuestId || guestResponses[0]?.guestId)
+              ? { ...guest, email: recipientEmail }
+              : guest
+          )
+        }
+      : result
+
+    sendRsvpConfirmationEmail(invitationForEmail).catch((emailError) => {
       console.error('Failed to send RSVP confirmation email:', emailError)
     })
     
