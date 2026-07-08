@@ -14,6 +14,18 @@ function generateCode() {
 
 const TITLES = ['Mr.', 'Mrs.', 'Ms.', 'Dr.', 'Miss', 'Rev.', 'Prof.']
 
+// Lowercase particles that should be joined with the word that follows them
+// e.g. "La Plante", "Al Souz", "Van Buren"
+const LAST_NAME_PARTICLES = new Set([
+  'al', 'la', 'le', 'de', 'del', 'della', 'der', 'van', 'von', 'di', 'da', 'ter', 'ten',
+])
+
+// Escape hatch for names the particle heuristic can't catch (e.g. Spanish
+// double surnames with no particle word). Match on the full stripped name.
+const LAST_NAME_OVERRIDES: Record<string, string> = {
+  'María Luisa Gómez Calvo': 'Gómez Calvo',
+}
+
 function stripTitle(str: string) {
   for (const title of TITLES) {
     if (str.startsWith(title)) return str.slice(title.length).trim()
@@ -27,16 +39,46 @@ function parseBool(val: boolean) {
 }
 
 /**
+ * Splits a stripped name (title already removed) into firstName/lastName.
+ * Handles single-token names (no last name), particle-based compound last
+ * names ("La Plante", "Al Souz"), and manual overrides for edge cases.
+ */
+function splitName(stripped: string): { firstName: string; lastName: string | null } {
+  if (LAST_NAME_OVERRIDES[stripped]) {
+    const lastName = LAST_NAME_OVERRIDES[stripped]
+    const firstName = stripped.slice(0, stripped.length - lastName.length).trim()
+    return { firstName, lastName }
+  }
+
+  const tokens = stripped.split(/\s+/)
+
+  if (tokens.length === 1) {
+    return { firstName: tokens[0], lastName: null }
+  }
+
+  if (tokens.length >= 3 && LAST_NAME_PARTICLES.has(tokens[tokens.length - 2].toLowerCase())) {
+    return {
+      firstName: tokens.slice(0, -2).join(' '),
+      lastName: tokens.slice(-2).join(' '),
+    }
+  }
+
+  return {
+    firstName: tokens.slice(0, -1).join(' '),
+    lastName: tokens[tokens.length - 1],
+  }
+}
+
+/**
  * Parses a single invitation string like:
  *   "Mr. Andrew and Mrs. Karen Coden"
  *   "Ms. Mackenzie Coden and Dr. Kevin Schmidt"
  *   "Mrs. Barbara Coden and Guest"
- *   "Ms. Megan Coden"
+ *   "Ms. Birgitta Istock and Mr. James Istock and Mr. Jack Istock"
  */
-function parseGuests(raw: string) {
+function parseGuests(raw: string, knowsMegan: boolean) {
   const parts = raw.split(/\s+and\s+/i).map((s: string) => s.trim())
-  const guests = []
-  const parsed = []
+  const parsed: { firstName: string; lastName: string | null; isGuest: boolean }[] = []
 
   for (const part of parts) {
     if (part.toLowerCase() === 'guest') {
@@ -45,30 +87,19 @@ function parseGuests(raw: string) {
     }
 
     const stripped = stripTitle(part)
-    const tokens = stripped.split(/\s+/)
-
-    if (tokens.length === 1) {
-      parsed.push({ firstName: tokens[0], lastName: null, isGuest: false })
-    } else {
-      const lastName = tokens[tokens.length - 1]
-      const firstName = tokens.slice(0, tokens.length - 1).join(' ')
-      parsed.push({ firstName, lastName, isGuest: false })
-    }
+    const { firstName, lastName } = splitName(stripped)
+    parsed.push({ firstName, lastName, isGuest: false })
   }
 
-  // Inherit last name from the last named person if missing
+  // Inherit last name from the last explicitly-named person if missing
   const sharedLastName = parsed.filter(p => p.lastName && !p.isGuest).slice(-1)[0]?.lastName ?? ''
 
-  for (const p of parsed) {
-    guests.push({
-      firstName: p.firstName,
-      lastName: p.lastName ?? sharedLastName,
-      guestType: p.isGuest ? 'PLUS_ONE' : 'NAMED_GUEST',
-      knowsMegan: false,
-    })
-  }
-
-  return guests
+  return parsed.map(p => ({
+    firstName: p.firstName,
+    lastName: p.lastName ?? sharedLastName,
+    guestType: p.isGuest ? 'PLUS_ONE' : 'NAMED_GUEST',
+    knowsMegan,
+  }))
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -83,10 +114,8 @@ async function main() {
   const workbook = XLSX.readFile(path.resolve(filePath))
   const sheet = workbook.Sheets[workbook.SheetNames[0]]
 
-  // Parse as array of objects using the first row as headers
   const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' })
 
-  // Find the relevant column names (trim whitespace from headers)
   const normalize = (str: string) => String(str).trim().toLowerCase()
 
   console.log(`Found ${rows.length} rows. Importing...\n`)
@@ -96,7 +125,6 @@ async function main() {
   let skipped = 0
 
   for (const row of rows) {
-    // Normalize keys to handle extra spaces in column names
     const get = (key: string) => {
       for (const [k, v] of Object.entries(row)) {
         if (normalize(k).includes(normalize(key))) return v
@@ -108,24 +136,24 @@ async function main() {
     if (!rawName) { skipped++; continue }
 
     const email = String(get('email')).trim() || null
-    const invitedToFriday = parseBool(get('Friday') as boolean)
-    const invitedToSunday = parseBool(get('Sunday') as boolean)
+    const invitedFriSun = parseBool(get('Fri/Sun') as boolean)
+    const knowsMegan = parseBool(get('Megan') as boolean)
 
-    const guests = parseGuests(rawName)
+    const guests = parseGuests(rawName, knowsMegan)
 
     const invitation = await prisma.invitation.create({
       data: {
         invitationCode: generateCode(),
         invitedToSaturday: true,
-        invitedToFriday,
-        invitedToSunday,
+        invitedToFriday: invitedFriSun,
+        invitedToSunday: invitedFriSun,
         guests: {
           create: guests.map(g => ({
             firstName: g.firstName,
             lastName: g.lastName,
             guestType: g.guestType,
-            knowsMegan: false,
-            email: g.guestType === 'NAMED_GUEST' && guests.indexOf(g) === 0 ? email : null,
+            knowsMegan: g.knowsMegan,
+            email,
           })),
         },
       },
@@ -136,12 +164,12 @@ async function main() {
     guestCount += invitation.guests.length
 
     const events = [
-      invitedToFriday ? 'Fri' : null,
+      invitedFriSun ? 'Fri' : null,
       'Sat',
-      invitedToSunday ? 'Sun' : null,
+      invitedFriSun ? 'Sun' : null,
     ].filter(Boolean).join(', ')
 
-    console.log(`✓ [${invitation.invitationCode}] ${rawName} (${events})${email ? ` <${email}>` : ''}`)
+    console.log(`✓ [${invitation.invitationCode}] ${rawName} (${events})${email ? ` <${email}>` : ''}${knowsMegan ? ' [knows Megan]' : ''}`)
     for (const g of invitation.guests) {
       console.log(`    → ${g.firstName} ${g.lastName} (${g.guestType})`)
     }
