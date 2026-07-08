@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server'
+import type { MealPreference } from '@prisma/client'
 import { prisma } from '@/lib/db'
 import { sendRsvpConfirmationEmail } from '@/lib/email'
+
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -55,52 +59,119 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const data = await request.json()
-    const { 
-      invitationId,
-      guestResponses, // Array of { guestId, fridayResponse, saturdayResponse, sundayResponse }
-      dietaryRestrictions,
-      notes 
-    } = data
-    
+    const body = await request.json() as {
+      invitationId: string
+      guestResponses: Array<{
+        guestId: string
+        fridayResponse?: string | null
+        saturdayResponse?: string | null
+        sundayResponse?: string | null
+        dinnerRequest?: MealPreference | null
+        plusOneFirstName?: string | null
+        plusOneLastName?: string | null
+      }>
+      emailGuestId?: string | null
+      emailAddress?: string | null
+      dietaryRestrictions?: string | null
+      notes?: string | null
+    }
+
+    const { invitationId, guestResponses, emailGuestId, emailAddress, dietaryRestrictions, notes } = body
+
     // Start a transaction to update all guests and the invitation
     const result = await prisma.$transaction(async (tx) => {
+      const persistedGuestIds = new Set<string>()
+
       // Update each guest's responses
       for (const response of guestResponses) {
-        await tx.guest.update({
+        const shouldClearMealChoice = response.saturdayResponse === 'NO'
+        const updateData: Record<string, unknown> = {
+          fridayResponse: response.fridayResponse ?? null,
+          saturdayResponse: response.saturdayResponse ?? null,
+          sundayResponse: response.sundayResponse ?? null,
+          dinnerRequest: shouldClearMealChoice ? null : (response.dinnerRequest ?? null),
+          updatedAt: new Date()
+        }
+
+        if (typeof response.plusOneFirstName === 'string' && response.plusOneFirstName.trim()) {
+          updateData.firstName = response.plusOneFirstName.trim()
+        }
+        if (typeof response.plusOneLastName === 'string' && response.plusOneLastName.trim()) {
+          updateData.lastName = response.plusOneLastName.trim()
+        }
+
+        const updatedGuest = await tx.guest.update({
           where: { id: response.guestId },
-          data: {
-            fridayResponse: response.fridayResponse || null,
-            saturdayResponse: response.saturdayResponse || null,
-            sundayResponse: response.sundayResponse || null,
-            updatedAt: new Date()
-          }
+          data: updateData
         })
+
+        persistedGuestIds.add(updatedGuest.id)
+      }
+
+      if (persistedGuestIds.size === 0) {
+        throw new Error('No guest rows were updated')
       }
       
-      // Update the invitation status and notes
-      const updatedInvitation = await tx.invitation.update({
+      const recipientEmail = emailAddress?.trim() || null
+      const emailTargetGuestId = emailGuestId || guestResponses[0]?.guestId || null
+
+      if (emailTargetGuestId && recipientEmail) {
+        await tx.guest.update({
+          where: { id: emailTargetGuestId },
+          data: { email: recipientEmail }
+        })
+      }
+
+      await tx.guest.updateMany({
+        where: { invitationId },
+        data: {
+          dietaryRestrictions: dietaryRestrictions?.trim() || null,
+          notes: notes?.trim() || null
+        }
+      })
+
+      await tx.invitation.update({
         where: { id: invitationId },
         data: {
           rsvpStatus: 'COMPLETED',
           rsvpSubmittedAt: new Date(),
-          dietaryRestrictions: dietaryRestrictions || null,
-          notes: notes || null,
           updatedAt: new Date()
-        },
+        }
+      })
+
+      const updatedInvitation = await tx.invitation.findUniqueOrThrow({
+        where: { id: invitationId },
         include: {
           guests: true
         }
       })
+
+      if (!updatedInvitation.id) {
+        throw new Error('Invitation was not persisted')
+      }
       
       return updatedInvitation
     })
 
-    sendRsvpConfirmationEmail(result).catch((emailError) => {
+    const recipientEmail = emailAddress?.trim() || result.guests.find((guest) => guest.email?.trim())?.email || null
+    const confirmationEmail = recipientEmail
+
+    const invitationForEmail = recipientEmail
+      ? {
+          ...result,
+          guests: result.guests.map((guest) =>
+            guest.id === (emailGuestId || guestResponses[0]?.guestId)
+              ? { ...guest, email: recipientEmail }
+              : guest
+          )
+        }
+      : result
+
+    sendRsvpConfirmationEmail(invitationForEmail).catch((emailError) => {
       console.error('Failed to send RSVP confirmation email:', emailError)
     })
     
-    return NextResponse.json({ success: true, invitation: result })
+    return NextResponse.json({ success: true, invitation: result, confirmationEmail })
   } catch (error) {
     console.error('RSVP error:', error)
     return NextResponse.json({ error: 'Failed to save RSVP' }, { status: 500 })

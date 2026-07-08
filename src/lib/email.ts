@@ -31,11 +31,19 @@ function formatResponse(response?: string | null) {
   return 'No response'
 }
 
+function formatMealPreference(meal?: string | null) {
+  if (meal === 'CHICKEN') return 'Chicken'
+  if (meal === 'SALMON') return 'Salmon'
+  if (meal === 'VEGETARIAN') return 'Vegetarian'
+  return 'Not selected'
+}
+
 function buildEmailBody(invitation: InvitationWithGuests) {
   const columns = [
-    { key: 'friday', label: 'Friday', visible: invitation.invitedToFriday },
-    { key: 'saturday', label: 'Saturday', visible: invitation.invitedToSaturday },
-    { key: 'sunday', label: 'Sunday', visible: invitation.invitedToSunday }
+    { key: 'friday', label: 'Friday Drinks', visible: invitation.invitedToFriday },
+    { key: 'saturday', label: 'Wedding', visible: invitation.invitedToSaturday },
+    { key: 'meal', label: 'Wedding Meal', visible: invitation.invitedToSaturday },
+    { key: 'sunday', label: 'Sunday Brunch', visible: invitation.invitedToSunday }
   ].filter(column => column.visible)
 
   const primaryGuest = invitation.guests.find((guest) => guest.firstName && guest.lastName) || invitation.guests[0]
@@ -44,6 +52,10 @@ function buildEmailBody(invitation: InvitationWithGuests) {
 
   const eventRows = invitation.guests.map((guest) => {
     const cells = columns.map((column) => {
+      if (column.key === 'meal') {
+        return `<td style="padding: 8px; border: 1px solid #ddd;">${formatMealPreference(guest.dinnerRequest)}</td>`
+      }
+
       const response = guest[`${column.key}Response` as 'fridayResponse' | 'saturdayResponse' | 'sundayResponse']
       return `<td style="padding: 8px; border: 1px solid #ddd;">${formatResponse(response)}</td>`
     }).join('')
@@ -55,8 +67,8 @@ function buildEmailBody(invitation: InvitationWithGuests) {
       </tr>`
   }).join('')
 
-  const dietary = invitation.dietaryRestrictions ?? 'None provided'
-  const notes = invitation.notes ?? 'None provided'
+  const dietary = invitation.guests[0]?.dietaryRestrictions ?? 'None provided'
+  const notes = invitation.guests[0]?.notes ?? 'None provided'
 
   return `
     <div style="font-family: Arial, sans-serif; color: #333;">

@@ -17,19 +17,21 @@ async function main() {
           firstName: 'John',
           lastName: 'Smith',
           email: 'john.smith@example.com',
-          phone: '555-0123',
-          guestType: 'NAMED_GUEST'
+          guestType: 'NAMED_GUEST',
+          knowsMegan: false
         },
         {
           firstName: 'Jane',
           lastName: 'Smith',
           email: 'jane.smith@example.com',
-          guestType: 'NAMED_GUEST'
+          guestType: 'NAMED_GUEST',
+          knowsMegan: false
         },
         {
           firstName: 'Tommy',
           lastName: 'Smith',
-          guestType: 'CHILD'
+          guestType: 'NAMED_GUEST',
+          knowsMegan: false
         }
       ]
     },
@@ -46,12 +48,14 @@ async function main() {
           firstName: 'Sarah',
           lastName: 'Doe',
           email: 'megancoden@gmail.com',
-          guestType: 'NAMED_GUEST'
+          guestType: 'NAMED_GUEST',
+          knowsMegan: false
         },
         {
           firstName: 'Plus One',
           lastName: 'Guest',
-          guestType: 'PLUS_ONE'
+          guestType: 'PLUS_ONE',
+          knowsMegan: false
         }
       ]
     },
@@ -68,13 +72,15 @@ async function main() {
           firstName: 'Michael',
           lastName: 'Johnson',
           email: 'megancoden@gmail.com',
-          guestType: 'NAMED_GUEST'
+          guestType: 'NAMED_GUEST',
+          knowsMegan: false
         },
         {
           firstName: 'Lisa',
           lastName: 'Johnson',
           email: 'mlcoden@umich.edu',
-          guestType: 'NAMED_GUEST'
+          guestType: 'NAMED_GUEST',
+          knowsMegan: false
         }
       ]
     },
@@ -91,8 +97,8 @@ async function main() {
           firstName: 'Emily',
           lastName: 'Wilson',
           email: 'megancoden@gmail.com',
-          phone: '555-0456',
-          guestType: 'NAMED_GUEST'
+          guestType: 'NAMED_GUEST',
+          knowsMegan: false
         }
       ]
     }

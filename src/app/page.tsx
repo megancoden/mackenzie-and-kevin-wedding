@@ -5,11 +5,9 @@ export default function HomePage() {
     <div className="min-h-screen pt-[124px] pb-16 px-4 background">
       <main className="flex flex-col items-center">
         <div className="w-full max-w-md sm:max-w-lg bg-[#f2f5f3] rounded-2xl shadow-md p-8 mt-6 flex flex-col items-center">
-
           <div className="header-title">
-            SAVE THE DATE!
+            We&apos;re getting married!
           </div>
-
           {/* Photo */}
           <div className="relative w-full rounded-xl overflow-hidden shadow-lg my-4">
             <Image
