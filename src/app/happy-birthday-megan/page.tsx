@@ -34,7 +34,7 @@ const AMAZON_ITEMS = [
   { icon: "🥤", name: "Blender",   price: "$28", url: AMAZON_URL },
 ];
 
-const PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "Custom"];
+const PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "$1000000", "Custom"];
 
 export default function RegistryPage() {
   const router = useRouter();
@@ -142,7 +142,7 @@ export default function RegistryPage() {
           <div className="access-modal-card">
             <h2 className="access-modal-title">Do you know Megan?</h2>
             <p className="access-modal-copy">
-              This page is meant for only people who personally know Mackenzie's sister, Megan. If you do not know Megan, please leave this page.
+              This page is meant for people who personally know Mackenzie&apos;s sister, Megan. If you do not know Megan, you may take a look if you want, but do not feel obligated!
             </p>
             <div className="access-modal-actions">
               <button className="access-modal-btn access-modal-btn--primary" onClick={() => handleAccessDecision('allowed')}>
@@ -588,7 +588,7 @@ export default function RegistryPage() {
           {/* Note card */}
           <div className="qlc-card">
             <p className="crisis-note-text">
-              In case you didn&apos;t know, Megan&apos;s 25th birthday is Friday, October 16th (aka the day before Mackenzie and Kevin&apos;s wedding). As a Master&apos;s student,
+              In case you didn&apos;t know, Megan&apos;s 25th birthday is Friday, October 16th (a.k.a. the day before Mackenzie and Kevin&apos;s wedding). As a Master&apos;s student,
               she has tons of schoolwork, crippling debt, and an existential crisis.
               What she doesn&apos;t have: money. Please help!
             </p>

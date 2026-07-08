@@ -167,9 +167,11 @@ export async function POST(request: Request) {
         }
       : result
 
-    sendRsvpConfirmationEmail(invitationForEmail).catch((emailError) => {
+    try {
+      await sendRsvpConfirmationEmail(invitationForEmail)
+    } catch (emailError) {
       console.error('Failed to send RSVP confirmation email:', emailError)
-    })
+    }
     
     return NextResponse.json({ success: true, invitation: result, confirmationEmail })
   } catch (error) {
