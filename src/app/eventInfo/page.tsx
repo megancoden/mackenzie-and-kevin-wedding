@@ -23,11 +23,8 @@ export default function EventInfoPage() {
 
           {/* Details */}
           <div className="text-center space-y-2 text-sm text-[var(--wedding-secondary-dark)]/80 mb-6">
-            <p>Ceremony followed by dinner and dancing</p>
-            {/* <p>Attire: Dressy casual (no ties)</p> */}
-            <p className="italic text-[var(--wedding-secondary-dark)]/50 text-xs">
-              Additional details coming soon
-            </p>
+            <p>Ceremony begins at 5:45 pm (please please arrive by 5:30 pm so we can start on time) followed by dinner and dancing</p>
+            <p>Attire: Dressy casual</p>
           </div>
 
           {/* Map */}

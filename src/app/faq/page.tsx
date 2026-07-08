@@ -6,10 +6,10 @@ export default function FAQPage() {
       q: "What is the dress code?",
       a: "Dressy casual. We want everyone to feel comfortable — we know you'll look great!",
     },
-    // {
-    //   q: "What time will the wedding begin?",
-    //   a: "The ceremony will begin at 6:00 PM on October 17, 2026.",
-    // },
+    {
+      q: "What time should I arrive for the ceremony?",
+      a: "We kindly ask that our guests plan to arrive at 5:30 pm to allow time to get settled and find seats before the ceremony begins at 5:45 pm",
+    },
     {
       q: "Can I bring a plus one?",
       a: "Please refer to the front of your invitation envelope to see if a guest is included. If not, we hope you understand that we are limited on space and unable to accommodate additional guests. Feel free to reach out if you have any questions.",
@@ -25,6 +25,10 @@ export default function FAQPage() {
     {
       q: "Will we be outdoors?",
       a: "Weather permitting, the ceremony and cocktail hour will be held outdoors. Fall in Michigan can be unpredictable, so please dress accordingly. The reception will be indoors and climate controlled.",
+    },
+    {
+      q: "Is there transportation to the wedding venue?",
+      a: "There is no provided transportation, but we recommend renting a car, driving with a friend, or calling a rideshare. Please get home safely!",
     },
   ];
 
