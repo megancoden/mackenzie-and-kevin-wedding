@@ -407,10 +407,16 @@ export default function RSVPPage() {
               </button>
               {showBirthdayPageLink && (
                 <>
-                  <div>P.S. Mackenzie&apos;s sister Megan is turning 25 on October 16th! How about a gift for her too?</div>
-                  <Link href="/happy-birthday-megan" legacyBehavior>
-                    <a className="underline hover:text-gray-700">Check out Megan&apos;s Birthday Page</a>
-                  </Link>
+                  <div className="w-full mt-4 text-sm text-gray-700 break-words">
+                    P.S. Mackenzie&apos;s sister Megan was the brilliant creator of this website, and her 25th birthday is the day before the wedding (October 16th)! How about a gift for her too?
+                  </div>
+                  <div className="w-full flex justify-start">
+                    <Link href="/happy-birthday-megan" legacyBehavior>
+                      <a className="w-1/2 py-1.5 px-6 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 text-center disabled:opacity-70">
+                        Check out Megan&apos;s Birthday Page
+                      </a>
+                    </Link>
+                  </div>
                 </>
               )}
             </div>
