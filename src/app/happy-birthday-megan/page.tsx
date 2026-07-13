@@ -8,6 +8,13 @@ const VENMO_HANDLE = "megan-coden";
 
 const AMAZON_URL = "https://www.amazon.com/hz/wishlist/ls/3F7XQZLZLZP9A?ref_=wl_share&fbclid=IwAR1n8qjYt2r0uXGdJrQeHjKkWl5sYqv1hN8wXcLhVZyXc5n6iJzT4V9g";
 
+const AMAZON_GC_BASE = "https://www.amazon.com/Amazon-eGift-Card-Happy-Birthday/dp/B0FLDMPWBR?pf_rd_p=039cbb62-0492-439a-97f3-d730bf5c9902&pf_rd_r=BEQ91T7N8AZYFQ424JA6&ref_=US_GC_AGC_P1_25_STND_B0FLDMPWBR&th=1";
+
+const amazonGcUrl = (amount: string) => {
+  const gpo = amount && Number(amount) > 0 ? amount : "25"; // fallback to $25 if nothing selected
+  return `${AMAZON_GC_BASE}&gpo=${gpo}`;
+};
+
 const GIFT_CARDS = [
   { name: "Amazon",     icon: "📦", url: "https://www.amazon.com/Amazon-eGift-Card-Happy-Birthday/dp/B0FLDMPWBR?pf_rd_p=039cbb62-0492-439a-97f3-d730bf5c9902&pf_rd_r=BEQ91T7N8AZYFQ424JA6&ref_=US_GC_AGC_P1_25_STND_B0FLDMPWBR&th=1&gpo=25" }, // TODO: SWITCH GPO=25, 50, ETC
   { name: "Target",     icon: "🎯", url: "https://www.target.com/p/happy-birthday-target-cake-target-giftcard/-/A-88038753?preselect=87978958#lnk=sametab" },
@@ -34,7 +41,8 @@ const AMAZON_ITEMS = [
   { icon: "📸", name: "Digital Camera",   price: "$27", url: AMAZON_URL },
 ];
 
-const PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "$100,000", "Custom"];
+const GC_PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "$2,000", "Custom"];
+const VENMO_PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "$100,000", "Custom"];
 
 export default function RegistryPage() {
   const router = useRouter();
@@ -45,6 +53,24 @@ export default function RegistryPage() {
   }, []);
 
   const [accessDecision, setAccessDecision] = useState<'pending' | 'allowed' | 'denied'>('pending');
+  const [venmoAmtError, setVenmoAmtError] = useState(false);
+  const [gcAmtError, setGcAmtError] = useState(false);
+
+  // Formats a raw numeric string like "12345" -> "12,345"
+  const formatWithCommas = (value: string) => {
+    if (!value) return '';
+    return Number(value).toLocaleString('en-US');
+  };
+
+  // Strips commas/non-digits. Rejects values over max by keeping the previous value.
+  const parseAmountInput = (raw: string, currentValue: string, max: number) => {
+    const digitsOnly = raw.replace(/[^\d]/g, '');
+    if (!digitsOnly) return '';
+    if (Number(digitsOnly) > max) {
+      return currentValue; // reject the keystroke, stay at last valid value
+    }
+    return String(Number(digitsOnly)); // strips leading zeros too
+  };
 
   const handleAccessDecision = (choice: 'allowed' | 'denied') => {
     if (choice === 'denied') {
@@ -615,7 +641,7 @@ export default function RegistryPage() {
             </div>
             <span className="sub-label">Amount</span>
             <div className="amount-row">
-              {PRESET_AMOUNTS.map((amt) => (
+              {VENMO_PRESET_AMOUNTS.map((amt) => (
                 <span
                   key={amt}
                   className={`amt-pill${venmoAmtPill === amt ? " active" : ""}`}
@@ -626,19 +652,32 @@ export default function RegistryPage() {
               ))}
             </div>
             {venmoAmtPill === "Custom" && (
-              <div className="custom-amount-row">
-                <span className="dollar-sign">$</span>
-                <input
-                  type="number"
-                  min="1"
-                  placeholder="Enter amount"
-                  value={venmoCustomAmt}
-                  onChange={(e) => setVenmoCustomAmt(e.target.value)}
-                />
-              </div>
+              <>
+                <div className="custom-amount-row">
+                  <span className="dollar-sign">$</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Enter amount"
+                    value={formatWithCommas(venmoCustomAmt)}
+                    onChange={(e) => {
+                      const digitsOnly = e.target.value.replace(/[^\d]/g, '');
+                      const tooLarge = digitsOnly && Number(digitsOnly) > 999999;
+                      setVenmoAmtError(!!tooLarge);
+                      setVenmoCustomAmt(parseAmountInput(e.target.value, venmoCustomAmt, 999999));
+                    }}
+                    style={venmoAmtError ? { borderColor: '#ef4444' } : undefined}
+                  />
+                </div>
+                {venmoAmtError && (
+                  <p style={{ color: '#ef4444', fontFamily: "'DM Mono', monospace", fontSize: '13px', marginTop: '6px' }}>
+                    Amount must be less than 999,999
+                  </p>
+                )}
+              </>
             )}
             <a href={venmoUrl()} target="_blank" rel="noopener noreferrer" className="venmo-btn">
-              🤍 {venmoAmount && Number(venmoAmount) > 0 ? `Send $${venmoAmount} via Venmo` : "Open in Venmo"}
+              🤍 {venmoAmount && Number(venmoAmount) > 0 ? `Send $${formatWithCommas(venmoAmount)} via Venmo` : "Open in Venmo"}
             </a>
           </div>
 
@@ -680,7 +719,7 @@ export default function RegistryPage() {
             {selectedGC.name === "Amazon" && (
             <>
               <span className="sub-label">Amount</span><div className="amount-row">
-                {PRESET_AMOUNTS.map((amt) => (
+                {GC_PRESET_AMOUNTS.map((amt) => (
                   <span
                     key={amt}
                     className={`amt-pill${gcAmtPill === amt ? " active" : ""}`}
@@ -691,24 +730,37 @@ export default function RegistryPage() {
                 ))}
               </div>
               {gcAmtPill === "Custom" && (
-                <div className="custom-amount-row">
-                  <span className="dollar-sign">$</span>
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Enter amount"
-                    value={gcCustomAmt}
-                    onChange={(e) => setGcCustomAmt(e.target.value)}
-                  />
-                </div>
+                <>
+                  <div className="custom-amount-row">
+                    <span className="dollar-sign">$</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="Enter amount"
+                      value={formatWithCommas(gcCustomAmt)}
+                      onChange={(e) => {
+                        const digitsOnly = e.target.value.replace(/[^\d]/g, '');
+                        const tooLarge = digitsOnly && Number(digitsOnly) > 2000;
+                        setGcAmtError(!!tooLarge);
+                        setGcCustomAmt(parseAmountInput(e.target.value, gcCustomAmt, 2000));
+                      }}
+                      style={gcAmtError ? { borderColor: '#ef4444' } : undefined}
+                    />
+                  </div>
+                  {gcAmtError && (
+                    <p style={{ color: '#ef4444', fontFamily: "'DM Mono', monospace", fontSize: '13px', marginTop: '6px' }}>
+                      Amount cannot exceed $2,000
+                    </p>
+                  )}
+                </>
               )}
               </>
           )}
             <div className="qlc-card-title" style={{ marginBottom: '1.25rem', marginTop: '1.25rem' }}>
               Please send any gift cards to mlcoden@umich.edu
             </div>
-            <a href={selectedGC.url} target="_blank" rel="noopener noreferrer" className="gc-link-btn">
-              Buy {selectedGC.name} Gift Card{selectedGC.name === "Amazon" && gcAmount && Number(gcAmount) > 0 ? ` · $${gcAmount}` : ""} →
+            <a href={selectedGC.name === "Amazon" ? amazonGcUrl(gcAmount) : selectedGC.url} target="_blank" rel="noopener noreferrer" className="gc-link-btn">
+              Buy {selectedGC.name} Gift Card{selectedGC.name === "Amazon" && gcAmount && Number(gcAmount) > 0 ? ` · $${formatWithCommas(gcAmount)}` : ""} →
             </a>
           </div>
 
