@@ -41,8 +41,8 @@ const AMAZON_ITEMS = [
   { icon: "📸", name: "Digital Camera",   price: "$27", url: AMAZON_URL },
 ];
 
-const GC_PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "$2,000", "Custom"];
-const VENMO_PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "$100,000", "Custom"];
+const GC_PRESET_AMOUNTS = ["$25", "$50", "$100", "$2,000", "Custom"];
+const VENMO_PRESET_AMOUNTS = ["$25", "$50", "$100", "$100,000", "Custom"];
 
 export default function RegistryPage() {
   const router = useRouter();
