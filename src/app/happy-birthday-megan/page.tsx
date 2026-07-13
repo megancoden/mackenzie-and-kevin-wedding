@@ -31,7 +31,7 @@ const AMAZON_ITEMS = [
   { icon: "😁", name: "Electric Toothbrush",  price: "$50", url: AMAZON_URL },
   { icon: "✈️", name: "Travel Pillow", price: "$65", url: AMAZON_URL },
   { icon: "🎧", name: "Noise-Canceling Headphones",  price: "$64", url: AMAZON_URL},
-  { icon: "🥤", name: "Blender",   price: "$28", url: AMAZON_URL },
+  { icon: "📸", name: "Digital Camera",   price: "$27", url: AMAZON_URL },
 ];
 
 const PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "$1000000", "Custom"];
