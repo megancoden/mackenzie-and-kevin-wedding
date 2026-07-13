@@ -360,7 +360,7 @@ export default function RSVPPage() {
             <h2 className="text-2xl font-bold fancy-font text-wedding-secondary-dark mb-4">RSVP submitted successfully</h2>
 
             {email ? (
-              <p className="mb-4">A confirmation was sent to: <strong>{email}</strong></p>
+              <p className="mb-4">A confirmation will be sent to: <strong>{email}</strong></p>
             ) : (
               <p className="mb-4">Your RSVP has been saved. No confirmation email was sent because no email address was provided.</p>
             )}
@@ -407,7 +407,7 @@ export default function RSVPPage() {
               </button>
               {showBirthdayPageLink && (
                 <>
-                  <div>P.S. Mackenzie&apos;s sister Megan is turning 25 on October 16th!</div>
+                  <div>P.S. Mackenzie&apos;s sister Megan is turning 25 on October 16th! How about a gift for her too?</div>
                   <Link href="/happy-birthday-megan" legacyBehavior>
                     <a className="underline hover:text-gray-700">Check out Megan&apos;s Birthday Page</a>
                   </Link>
