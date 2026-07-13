@@ -84,7 +84,7 @@ function buildEmailBody(invitation: InvitationWithGuests) {
   }
 
   if (attendingSunday) {
-    eventDetails.push(`<p style="margin: 8px 0 0;"><strong>Sunday, October 18 from 10am-1pm</strong><br />Coden Home<br />Attire: Jean Casual</p>`)
+    eventDetails.push(`<p style="margin: 8px 0 0;"><strong>Sunday, October 18 from 10am-1pm</strong><br />The Coden Home<br />Attire: Jean Casual</p>`)
   }
 
   return `
