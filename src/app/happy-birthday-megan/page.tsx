@@ -34,7 +34,7 @@ const AMAZON_ITEMS = [
   { icon: "📸", name: "Digital Camera",   price: "$27", url: AMAZON_URL },
 ];
 
-const PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "$1000000", "Custom"];
+const PRESET_AMOUNTS = ["$25", "$50", "$75", "$100", "$100,000", "Custom"];
 
 export default function RegistryPage() {
   const router = useRouter();
@@ -62,8 +62,9 @@ export default function RegistryPage() {
   const [venmoAmtPill,  setVenmoAmtPill]  = useState("$25");
   const [venmoCustomAmt,setVenmoCustomAmt]= useState("");
 
-  const gcAmount    = gcAmtPill    === "Custom" ? gcCustomAmt    : gcAmtPill.replace("$", "");
-  const venmoAmount = venmoAmtPill === "Custom" ? venmoCustomAmt : venmoAmtPill.replace("$", "");
+  const parseAmount = (value: string) => value.replace(/[^0-9.]/g, '')
+  const gcAmount    = gcAmtPill    === "Custom" ? gcCustomAmt    : parseAmount(gcAmtPill)
+  const venmoAmount = venmoAmtPill === "Custom" ? venmoCustomAmt : parseAmount(venmoAmtPill)
 
   const venmoUrl = () => {
     const note = encodeURIComponent(selectedFund.note);
