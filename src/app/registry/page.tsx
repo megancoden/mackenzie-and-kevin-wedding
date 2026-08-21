@@ -9,6 +9,7 @@ const VENMO_HANDLE = '@mackenziecoden';
 export default function RegistryPage() {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
+  const [amountError, setAmountError] = useState(false);
 
   useEffect(() => {
     const script = document.createElement('script')
@@ -21,6 +22,22 @@ export default function RegistryPage() {
       script.remove()
     }
   }, [])
+
+  // Formats a raw numeric string like "12345" -> "12,345"
+const formatWithCommas = (value: string) => {
+  if (!value) return '';
+  return Number(value).toLocaleString('en-US');
+};
+
+// Strips commas/non-digits. Rejects values over 999999 by keeping the previous value.
+const parseAmountInput = (raw: string, currentValue: string) => {
+  const digitsOnly = raw.replace(/[^\d]/g, '');
+  if (!digitsOnly) return '';
+  if (Number(digitsOnly) > 999999) {
+    return currentValue; // reject the keystroke, stay at last valid value
+  }
+  return String(Number(digitsOnly)); // strips leading zeros too
+};
 
   const venmoUrl = () => {
     const handle = VENMO_HANDLE.replace('@', '');
@@ -68,25 +85,35 @@ export default function RegistryPage() {
             </p>
 
             {/* Amount input */}
-            <div className="flex items-center bg-[#f2f5f3] rounded-lg px-4 py-2.5 mb-3">
+            <div className={`flex items-center bg-[#f2f5f3] rounded-lg px-4 py-2.5 border ${amountError ? 'border-red-400' : 'border-transparent'}`}>
               <span className="text-[var(--wedding-secondary-dark)]/50 mr-1 text-sm">$</span>
               <input
-                type="number"
-                min="1"
+                type="text"
+                inputMode="numeric"
                 placeholder="Enter amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                value={formatWithCommas(amount)}
+                onChange={(e) => {
+                  const digitsOnly = e.target.value.replace(/[^\d]/g, '');
+                  const tooLarge = digitsOnly && Number(digitsOnly) > 999999;
+                  setAmountError(!!tooLarge);
+                  setAmount(parseAmountInput(e.target.value, amount));
+                }}
                 className="flex-1 bg-transparent text-sm text-[var(--wedding-secondary-dark)] placeholder:text-[var(--wedding-secondary-dark)]/30 outline-none"
               />
               {amount && (
                 <button
-                  onClick={() => setAmount('')}
+                  onClick={() => { setAmount(''); setAmountError(false); }}
                   className="text-xs text-[var(--wedding-secondary-dark)]/30 hover:text-[var(--wedding-secondary-dark)]/60 transition-colors"
                 >
                   ✕
                 </button>
               )}
             </div>
+            {amountError && (
+              <p className="text-xs text-red-500 mb-3 mt-1">
+                Amount cannot exceed $999,999
+              </p>
+            )}
 
             {/* Note input */}
             <p className="text-xs uppercase tracking-widest text-[var(--wedding-secondary-dark)]/40 mb-2">
@@ -95,6 +122,7 @@ export default function RegistryPage() {
             <div className="flex items-center bg-[#f2f5f3] rounded-lg px-4 py-2.5 mb-3">
               <input
                 type="text"
+                inputMode="numeric"
                 maxLength={60}
                 placeholder="Wedding Gift"
                 value={note}
@@ -119,7 +147,7 @@ export default function RegistryPage() {
               className="block w-full text-center text-sm casual-font py-2.5 rounded-lg text-white transition-opacity hover:opacity-90 bg-[#3D95CE]"
             >
               {amount && Number(amount) > 0
-                ? `Send $${amount} via Venmo`
+                ? `Send $${formatWithCommas(amount)} via Venmo`
                 : 'Open in Venmo'}
             </a>
           </div>

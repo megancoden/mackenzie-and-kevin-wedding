@@ -70,6 +70,23 @@ function buildEmailBody(invitation: InvitationWithGuests) {
   const dietary = invitation.guests[0]?.dietaryRestrictions ?? 'None provided'
   const notes = invitation.guests[0]?.notes ?? 'None provided'
 
+  const eventDetails = []
+  const attendingFriday = invitation.guests.some((guest) => guest.fridayResponse === 'YES')
+  const attendingSaturday = invitation.guests.some((guest) => guest.saturdayResponse === 'YES')
+  const attendingSunday = invitation.guests.some((guest) => guest.sundayResponse === 'YES')
+
+  if (attendingFriday) {
+    eventDetails.push(`<p style="margin: 8px 0 0;"><strong>Friday, October 16 from 7-9pm</strong><br />Library Sports Pub & Grill<br />Attire: Jean Casual</p>`)
+  }
+
+  if (attendingSaturday) {
+    eventDetails.push(`<p style="margin: 8px 0 0;"><strong>Saturday, October 17 at 5:45pm</strong><br />Bay Pointe Golf Club<br />Attire: Dressy Casual</p>`)
+  }
+
+  if (attendingSunday) {
+    eventDetails.push(`<p style="margin: 8px 0 0;"><strong>Sunday, October 18 from 10am-1pm</strong><br />The Coden Home<br />Attire: Jean Casual</p>`)
+  }
+
   return `
     <div style="font-family: Arial, sans-serif; color: #333;">
       <h1 style="font-size: 24px; margin-bottom: 16px;">Your RSVP is confirmed</h1>
@@ -89,6 +106,10 @@ function buildEmailBody(invitation: InvitationWithGuests) {
       <p><strong>Special notes:</strong> ${notes}</p>
       <p>If you need to update your RSVP, you can return to the RSVP page and edit your response:</p>
       <p><a href="${rsvpLink}" style="color: #1d4ed8; text-decoration: none;">Update your RSVP</a></p>
+      <div style="margin-top: 24px;">
+        <p style="margin-bottom: 8px;"><strong>Event details</strong></p>
+        ${eventDetails.join('')}
+      </div>
     </div>`
 }
 

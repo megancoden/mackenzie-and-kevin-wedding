@@ -4,7 +4,7 @@ export default function FAQPage() {
   const faqs = [
     {
       q: "What is the dress code?",
-      a: "Dressy casual. We want everyone to feel comfortable — we know you'll look great!",
+      a: "Dressy casual — ties and heels not required. Aim for what you would wear to a nice dinner or upscale office meeting. We want everyone to feel comfortable — we know you'll look great!",
     },
     {
       q: "What time should I arrive for the ceremony?",
