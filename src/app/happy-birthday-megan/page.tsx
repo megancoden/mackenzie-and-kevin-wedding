@@ -52,7 +52,7 @@ export default function RegistryPage() {
     return () => document.body.classList.remove("birthday-page");
   }, []);
 
-  const [accessDecision, setAccessDecision] = useState<'pending' | 'allowed' | 'denied'>('pending');
+
   const [venmoAmtError, setVenmoAmtError] = useState(false);
   const [gcAmtError, setGcAmtError] = useState(false);
 
@@ -72,15 +72,6 @@ export default function RegistryPage() {
     return String(Number(digitsOnly)); // strips leading zeros too
   };
 
-  const handleAccessDecision = (choice: 'allowed' | 'denied') => {
-    if (choice === 'denied') {
-      router.replace('/');
-      return;
-    }
-
-    setAccessDecision(choice);
-  };
-
   const [selectedGC,    setSelectedGC]    = useState(GIFT_CARDS[0]);
   const [gcAmtPill,     setGcAmtPill]     = useState("$25");
   const [gcCustomAmt,   setGcCustomAmt]   = useState("");
@@ -98,92 +89,6 @@ export default function RegistryPage() {
     return venmoAmount && Number(venmoAmount) > 0 ? `${base}&amount=${venmoAmount}` : base;
   };
 
-  if (accessDecision === 'pending') {
-    return (
-      <>
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
-
-          .access-modal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            background: rgba(10, 10, 10, 0.72);
-          }
-          .access-modal-card {
-            width: min(100%, 480px);
-            background: #1a1a1a;
-            border: 3px solid #dc94aa;
-            border-radius: 20px;
-            padding: 2rem;
-            color: #fff;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-          }
-          .access-modal-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin: 0 0 0.75rem;
-          }
-          .access-modal-copy {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.84);
-            margin: 0 0 1.5rem;
-          }
-          .access-modal-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-          }
-          .access-modal-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            border-radius: 999px;
-            padding: 0.8rem 1.2rem;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: opacity 0.15s ease;
-          }
-          .access-modal-btn:hover { opacity: 0.9; }
-          .access-modal-btn--primary {
-            background: #dc94aa;
-            color: #1a1a1a;
-          }
-          .access-modal-btn--secondary {
-            background: transparent;
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.35);
-          }
-        `}</style>
-        <div className="access-modal-overlay">
-          <div className="access-modal-card">
-            <h2 className="access-modal-title">Do you know Megan?</h2>
-            <p className="access-modal-copy">
-              This page is meant for people who personally know Mackenzie&apos;s sister, Megan. If you do not know Megan, you may take a look if you want, but do not feel obligated!
-            </p>
-            <div className="access-modal-actions">
-              <button className="access-modal-btn access-modal-btn--primary" onClick={() => handleAccessDecision('allowed')}>
-                Yes, let me in
-              </button>
-              <button className="access-modal-btn access-modal-btn--secondary" onClick={() => handleAccessDecision('denied')}>
-                No, take me home
-              </button>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -248,67 +153,6 @@ export default function RegistryPage() {
           max-width: 672px;
           margin: 0 auto;
           padding: 0 1rem;
-        }
-
-        .access-modal-overlay {
-          position: fixed;
-          inset: 0;
-          z-index: 1000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 1rem;
-          background: rgba(10, 10, 10, 0.72);
-        }
-        .access-modal-card {
-          width: min(100%, 480px);
-          background: #1a1a1a;
-          border: 3px solid #dc94aa;
-          border-radius: 20px;
-          padding: 2rem;
-          color: #fff;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-        }
-        .access-modal-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.8rem;
-          margin: 0 0 0.75rem;
-        }
-        .access-modal-copy {
-          font-family: 'DM Sans', sans-serif;
-          font-size: 1rem;
-          line-height: 1.6;
-          color: rgba(255, 255, 255, 0.84);
-          margin: 0 0 1.5rem;
-        }
-        .access-modal-actions {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.75rem;
-        }
-        .access-modal-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border: none;
-          border-radius: 999px;
-          padding: 0.8rem 1.2rem;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 0.95rem;
-          font-weight: 600;
-          cursor: pointer;
-          text-decoration: none;
-          transition: opacity 0.15s ease;
-        }
-        .access-modal-btn:hover { opacity: 0.9; }
-        .access-modal-btn--primary {
-          background: #dc94aa;
-          color: #1a1a1a;
-        }
-        .access-modal-btn--secondary {
-          background: transparent;
-          color: #fff;
-          border: 1px solid rgba(255, 255, 255, 0.35);
         }
 
         /* ── Section card (the "box") ── */
